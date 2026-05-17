@@ -1,0 +1,11 @@
+---
+- name: Copy glitch plymouth animation
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/plymouth/glitch"
+    dest: /usr/share/plymouth/themes/
+  become: true
+
+- name: Set glitch plymouth theme
+  ansible.builtin.command:
+    cmd: "plymouth-set-default-theme -R glitch"
+  become: true

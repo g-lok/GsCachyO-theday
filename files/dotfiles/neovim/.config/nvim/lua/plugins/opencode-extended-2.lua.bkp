@@ -1,0 +1,329 @@
+local function safe_ask(prompt, opts)
+  if not vim.fn.executable("opencode") then
+    vim.notify("opencode: binary not installed. See opencode.ai", vim.log.levels.ERROR)
+    return
+  end
+  require("opencode").ask(prompt, opts)
+end
+
+-- helper send picker items opencode
+local function send_picker_items(picker, prefix)
+  local items = picker:selected({ fallback = true }) or {}
+  if #items == 0 then
+    local item = picker:current()
+    items = item and { item } or {}
+  end
+
+  local lines = {}
+  for _, item in ipairs(items) do
+    local file = item.file or item.text -- fallback if file missing
+    local pos = item.pos or { 1, 1 }
+    local location = require("opencode.context").format(file, {
+      start_line = pos[1],
+      start_col = pos[2] + 1,
+    })
+    table.insert(lines, string.format("- %s item at %s: %s", prefix or "@this", location, item.text))
+  end
+
+  picker:close()
+  if #lines > 0 then
+    safe_ask(table.concat(lines, "\n"), { submit = true, focus = false })
+  end
+end
+
+return {
+  -- ADDITIVE: Register groups
+  {
+    "folke/which-key.nvim",
+    optional = true,
+    opts = function(_, opts)
+      opts.spec = opts.spec or {}
+      table.insert(opts.spec, { "<leader>ay", group = "yanks/registers" })
+      table.insert(opts.spec, { "<leader>ax", group = "context/ai" })
+      table.insert(opts.spec, { "<leader>ag", group = "git" })
+    end,
+  },
+
+  -- EXTENDED: OpenCode
+  {
+    "Nickvandyke/opencode.nvim",
+    opts = {
+      contexts = {
+        -- idiomatic todo
+        ["@todo"] = function(context)
+          local ok, todo = pcall(require, "todo-comments")
+          if not ok then
+            return nil
+          end
+          local items = {}
+          local list = todo.status or {}
+          for _, t in ipairs(list) do
+            local location = require("opencode.context").format(t.bufnr, {
+              start_line = t.lnum,
+              start_col = t.col,
+            })
+            table.insert(items, string.format("- %s: [%s] %s", location, t.tag, t.text))
+          end
+          return #items > 0 and table.concat(items, "\n") or nil
+        end,
+
+        ["@all_diagnostics"] = function()
+          local items = {}
+          local all_diags = vim.diagnostic.get()
+          for _, d in ipairs(all_diags) do
+            if d.severity <= vim.diagnostic.severity.WARN then
+              local bufnr = d.bufnr
+              if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+                local filename = vim.api.nvim_buf_get_name(bufnr)
+                if filename ~= "" then
+                  local rel_path = vim.fn.fnamemodify(filename, ":p:~")
+                  local loc = string.format("%s:L%d:C%d", rel_path, d.lnum + 1, d.col + 1)
+                  local msg = d.message:gsub("%s+", " "):gsub("^%s", ""):gsub("%s$", "")
+                  table.insert(items, string.format("- %s (%s): %s", loc, d.source or "unknown", msg))
+                end
+              end
+            end
+          end
+
+          if #items == 0 then
+            return "No diagnostics found in workspace."
+          end
+          return #items .. " diagnostics:\n" .. table.concat(items, "\n")
+        end,
+
+        ["@qf"] = function()
+          local qflist = vim.fn.getqflist()
+          if #qflist == 0 then
+            return nil
+          end
+          local items = {}
+          for _, entry in ipairs(qflist) do
+            if entry.bufnr ~= 0 then
+              local filename = vim.api.nvim_buf_get_name(entry.bufnr)
+              if filename ~= "" then
+                local line = string.format("%s:L%d:C%d", vim.fn.fnamemodify(filename, ":p:~"), entry.lnum, entry.col)
+                local text = entry.text and entry.text:gsub("%s+", " "):gsub("^%s", ""):gsub("^%s", "") or ""
+                table.insert(items, string.format("- %s: %s", line, text))
+              end
+            end
+          end
+          return #items .. " items in Quickfix:\n" .. table.concat(items, "\n")
+        end,
+
+        ["@marks"] = function(context)
+          local items = {}
+          for _, mark in ipairs(vim.fn.getmarklist()) do
+            if mark.mark:match("^'[A-Z]$") then
+              local path = vim.api.nvim_buf_get_name(mark.pos[1])
+              if path ~= "" then
+                table.insert(items, string.format("- Global [%s]: %s:L%d", mark.mark:sub(2), path, mark.pos[2]))
+              end
+            end
+          end
+          for _, mark in ipairs(vim.fn.getmarklist(context.buf)) do
+            if mark.mark:match("^'[a-z]$") then
+              table.insert(items, string.format("- Local [%s]: L%d", mark.mark:sub(2), mark.pos[2]))
+            end
+          end
+          return #items > 0 and #items .. " marks:\n" .. table.concat(items, "\n") or nil
+        end,
+
+        ["@clipboard"] = function()
+          local reg = vim.fn.getreg("+")
+          return (reg ~= "") and reg or nil
+        end,
+      },
+      ask = {
+        prompt = "Ask opencode: ",
+        completion = "customlist,v:lua.opencode_completion",
+        snacks = {
+          icon = "󰚩 ",
+          win = {
+            title_pos = "left",
+            relative = "cursor",
+            row = -3,
+            col = 0,
+            keys = {
+              i_cr = {
+                desc = "submit",
+              },
+              i_s_cr = {
+                function(win)
+                  local text = win:text() .. "\\n"
+                  vim.api.nvim_buf_set_lines(win.buf, 0, -1, false, { text })
+                  win:execute("confirm")
+                end,
+                mode = "i",
+                desc = "append",
+              },
+            },
+            footer_keys = { "<CR>", "<S-CR>" },
+            b = {
+              completion = true,
+            },
+            bo = {
+              filetype = "opencode_ask",
+            },
+            on_buf = function(win)
+              vim.lsp.start(require("opencode.ui.ask.cmp"), {
+                bufnr = win.buf,
+              })
+            end,
+          },
+        },
+      },
+    },
+    config = function(_, opts)
+      -- Merge directly into the plugin's internal opts table to avoid vim.g table limitations
+      local m = require("opencode.config")
+      m.opts = vim.tbl_deep_extend("force", m.opts, opts)
+
+      -- REPLICATED FROM BASE: Fix for marksman crashing on opencode buffers
+      vim.api.nvim_create_autocmd({ "BufAdd", "BufWinEnter", "TermOpen" }, {
+        callback = function(event)
+          if vim.api.nvim_buf_get_name(event.buf):match("opencode") then
+            vim.bo[event.buf].filetype = "opencode"
+            vim.b[event.buf].lsp_ignore = true
+            local clients = vim.lsp.get_clients({ bufnr = event.buf })
+            for _, client in ipairs(clients) do
+              vim.lsp.buf_detach_client(event.buf, client.id)
+            end
+          end
+        end,
+      })
+
+      vim.api.nvim_create_autocmd({ "BufEnter" }, {
+        pattern = "*:opencode --port*",
+        callback = function()
+          vim.cmd("startinsert")
+        end,
+      })
+
+      vim.api.nvim_create_autocmd({ "TermOpen" }, {
+        group = vim.api.nvim_create_augroup("opencode_integrated_ext", { clear = true }),
+        pattern = "*:opencode --port*",
+        callback = function(event)
+          vim.bo[event.buf].buflisted = false
+          vim.bo[event.buf].filetype = "opencode"
+
+          vim.keymap.set({ "t", "n" }, "<C-h>", "<C-\\><C-n><C-w>h", { buffer = event.buf, desc = "Go to Left Window" })
+          vim.keymap.set({ "t", "n" }, "<C-j>", "<C-\\><C-n><C-w>j", { buffer = event.buf, desc = "Go to Lower Window" })
+          vim.keymap.set({ "t", "n" }, "<C-k>", "<C-\\><C-n><C-w>k", { buffer = event.buf, desc = "Go to Upper Window" })
+          vim.keymap.set({ "t", "n" }, "<C-l>", "<C-\\><C-n><C-w>l", { buffer = event.buf, desc = "Go to Right Window" })
+          
+          -- Navigation
+          vim.keymap.set("t", "<C-U>", function() require("opencode").command("session.half.page.up") end, { buffer = event.buf, desc = "Half scroll back" })
+          vim.keymap.set("t", "<C-D>", function() require("opencode").command("session.half.page.down") end, { buffer = event.buf, desc = "Half scroll forward" })
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+          if vim.fn.has("unix") == 1 then
+            local pid = vim.fn.getpid()
+            vim.fn.system({ "pkill", "-P", tostring(pid), "-f", "opencode" })
+          end
+        end,
+      })
+    end,
+
+    keys = {
+      -- Snacks pickers: idiomatic LazyVim
+      {
+        "<leader>axB",
+        function()
+          require("opencode").ask("@all_diagnostics ", { submit = true })
+        end,
+        mode = { "n", "x" },
+        desc = "Ask with all open buffer diagnostics",
+      },
+      {
+        "<leader>axt",
+        function()
+          require("opencode").ask("@todo ", { submit = true })
+        end,
+        mode = { "n", "x" },
+        desc = "Ask with TODO comments",
+      },
+      {
+        "<leader>axg",
+        function()
+          require("opencode").ask("@grep ", { submit = true })
+        end,
+        mode = { "n", "x" },
+        desc = "Ask with Grep results",
+      },
+      {
+        "<leader>ayc",
+        function()
+          require("opencode").ask("@clipboard ", { submit = true })
+        end,
+        mode = { "n", "x" },
+        desc = "Ask with clipboard",
+      },
+      {
+        "<leader>ayy",
+        function()
+          Snacks.picker.registers({
+            confirm = function(picker, item)
+              picker:close()
+              safe_ask("@this: " .. item.text, { submit = true, focus = false })
+            end,
+            title = "OpenCode: Pick Register",
+          })
+        end,
+        desc = "Pick Register for OpenCode",
+      },
+      {
+        "<leader>axD",
+        function()
+          Snacks.picker.diagnostics({
+            confirm = function(picker)
+              send_picker_items(picker, "@diagnostic")
+            end,
+            title = "OpenCode: Pick Diagnostic",
+          })
+        end,
+        desc = "Pick Diagnostic for OpenCode",
+      },
+      {
+        "<leader>axQ",
+        function()
+          Snacks.picker.qflist({
+            confirm = function(picker)
+              send_picker_items(picker, "@qf")
+            end,
+            title = "OpenCode: Pick Quickfix Item",
+          })
+        end,
+        desc = "Pick Quickfix Item for OpenCode",
+      },
+      {
+        "<leader>agl",
+        function()
+          Snacks.picker.git_log({
+            confirm = function(picker, item)
+              picker:close()
+              safe_ask("@this commit: " .. item.commit, { submit = true, focus = false })
+            end,
+            title = "OpenCode: Pick Commit",
+          })
+        end,
+        desc = "Pick Git Commit for OpenCode",
+      },
+      {
+        "<leader>ags",
+        function()
+          Snacks.picker.git_status({
+            confirm = function(picker, item)
+              picker:close()
+              safe_ask("@this file: " .. item.file, { submit = true, focus = false })
+            end,
+            title = "OpenCode: Pick Git Status",
+          })
+        end,
+        desc = "Pick Changed File for OpenCode",
+      },
+    },
+  },
+}
