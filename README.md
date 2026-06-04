@@ -10,6 +10,8 @@ Run:
 ./run.sh
 ```
 
+Make sure you auth the gh cli tool, and be sure to use SSH (generate and upload key if you don't have one already).
+
 ## Usage
 
 I'll write up more comprehensive docs, but for now check:
