@@ -21,14 +21,12 @@
       community.general.pacman:
         update_cache: true
         upgrade: true
-      register: pacman_updated
       become: true
 
     - name: Install pacman packages
       community.general.pacman:
         name: "{{ pacman_pkgs }}"
         state: present
-      when: pacman_updated.changed
       register: pacman_packages
 
     - name: Install AUR packages
@@ -41,12 +39,9 @@
 
     - name: Install oh-my-zsh + plugins
       ansible.builtin.include_tasks: tasks/oh-my-zsh.yml
-      when: aur_packages.changed
 
     - name: Install lazyvim
       ansible.builtin.include_tasks: tasks/lazyvim.yml
-      when: aur_packages.changed
-      register: lazyvim
 
     - name: Glitch plymouth theme
       ansible.builtin.include_tasks: tasks/glitch-animation.yml
@@ -56,7 +51,7 @@
 
     - name: Dotfiles
       ansible.builtin.include_tasks: tasks/dotfiles.yml
-      when: lazyvim.changed
+      when: pacman_packages.changed
       register: dotfiles
 
     - name: Mise
