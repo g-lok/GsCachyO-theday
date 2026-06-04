@@ -40,4 +40,5 @@ There's probably things I set up that I forgot about, but this should cover MOST
 - Enabling opensssh server and configuring firewall for ssh access and various ports that need to be opened (localsend, for example, needs some tcp and udp ports opened).
 - Change localsend to launch with niri instead of in-app setting, doesn't seem to work.
 - Changing limine.conf to something you like
+- Enabling system services. I didn't bother messing with any services here, you'll have to enable them yourself.
 - PM me to learn the tools, workflow, keybinds, etc.
