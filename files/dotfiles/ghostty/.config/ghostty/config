@@ -1,0 +1,24 @@
+theme = "Catppuccin Mocha"
+font-family = "JetBrainsMono Nerd Font Mono"
+font-style = "Regular"
+font-size = 12
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title,ssh-env,ssh-terminfo,path
+command = /home/linuxbrew/.linuxbrew/bin/zsh -li -c "zellij"   
+macos-titlebar-style = hidden
+confirm-close-surface = false
+#shell-integration-features = cursor,sudo,title
+
+keybind = ctrl+shift+j=unbind
+keybind = ctrl+shift+tab=unbind
+keybind = ctrl+shift+w=unbind
+keybind = ctrl+shift+t=unbind
+keybind = ctrl+shift+arrow_left=unbind
+keybind = ctrl+shift+arrow_right=unbind
+keybind = ctrl+shift+o=unbind
+keybind = ctrl+shift+e=unbind
+keybind = ctrl+shift+page_up=unbind
+keybind = ctrl+shift+page_down=unbind
+keybind = ctrl+shift+f=unbind
+keybind = ctrl+shift+i=unbind
+keybind = ctrl+shift+enter=unbind

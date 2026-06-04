@@ -1,0 +1,15 @@
+---
+- name: Check if oh-my-zsh installed
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] ~ '/.oh-my-zsh' }}"
+  register: ohmyzsh
+
+- name: install oh-my-zsh and plugins
+  ansible.builtin.shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+    git -C "$ZSH_CUSTOM/plugins/zsh-autosuggestions" pull  || git clone https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    git -C "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" pull || git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    git -C "$ZSH_CUSTOM/plugins/zsh-autocomplete" pull || git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git "$ZSH_CUSTOM/plugins/zsh-autocomplete"
+    git -C "$ZSH_CUSTOM/plugins/fzf-tab" pull || git clone https://github.com/Aloxaf/fzf-tab "$ZSH_CUSTOM/plugins/fzf-tab"
+  when: not ohmyzsh.stat.exists

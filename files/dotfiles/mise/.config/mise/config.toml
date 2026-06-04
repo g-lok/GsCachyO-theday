@@ -1,0 +1,26 @@
+[tools]
+"cargo:jj-starship" = "latest"
+"cargo:xremap" = "latest"
+elixir = "latest"
+erlang = "latest"
+flutter = "latest"
+"github:anomalyco/opencode" = "latest"
+"github:odin-lang/Odin" = "latest"
+go = "latest"
+"go:github.com/bootdotdev/bootdev" = "latest"
+java = "latest"
+kotlin = "latest"
+node = "lts"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+odin = { version = "latest", exe = "odin" }
+pipx = "latest"
+poetry = "latest"
+python = "latest"
+ruby = "latest"
+rust = "latest"
+terraform = "latest"
+zig = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = ["ruby"]
+zig.use_community_mirrors = true

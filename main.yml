@@ -1,0 +1,115 @@
+---
+- name: Configure host.
+  hosts: localhost
+  gather_facts: true
+
+  pre_tasks:
+    - name: Include playbook configuration.
+      include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ["always"]
+
+    - name: Download Ansible requirements
+      ansible.builtin.command: >
+        ansible-galaxy install -r "requirements.yml"
+      register: galaxy_output
+      changed_when: "'was installed successfully' in galaxy_output.stdout"
+
+  tasks:
+    - name: Run the equivalent of "pacman -Syu" to update/upgrade
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+      register: pacman_updated
+      become: true
+
+    - name: Install pacman packages
+      community.general.pacman:
+        name: "{{ pacman_pkgs }}"
+        state: present
+      when: pacman_updated.changed
+      register: pacman_packages
+
+    - name: Install AUR packages
+      kewlfft.aur.aur:
+        name: "{{ yay_pkgs }}"
+        state: present
+        update_cache: yes
+      when: pacman_packages.changed
+      register: aur_packages
+
+    - name: Install oh-my-zsh + plugins
+      ansible.builtin.include_tasks: tasks/oh-my-zsh.yml
+      when: aur_packages.changed
+
+    - name: Install lazyvim
+      ansible.builtin.include_tasks: tasks/lazyvim.yml
+      when: aur_packages.changed
+      register: lazyvim
+
+    - name: Glitch plymouth theme
+      ansible.builtin.include_tasks: tasks/glitch-animation.yml
+
+    - name: Slice login
+      ansible.builtin.include_tasks: tasks/slice-login.yml
+
+    - name: Dotfiles
+      ansible.builtin.include_tasks: tasks/dotfiles.yml
+      when: lazyvim.changed
+      register: dotfiles
+
+    - name: Mise
+      ansible.builtin.command:
+        cmd: "mise install"
+      when: dotfiles.changed
+      register: mise
+
+    - name: Poetry local venvs
+      ansible.builtin.command:
+        cmd: "poetry config virtualenvs.in-project true"
+      when: mise.changed
+
+    - name: Config git/jujutsu
+      ansible.builtin.command:
+        cmd: >
+          "git config --global user.name '{{ git_name }}' &&" +
+          "git config --global user.email '{{ git_email }}' &&" +
+          "jj config set --user user.name '{{ git_name }}' &&" +
+          "jj config set --user user.email '{{ git_email }}'"
+      when: dotfiles.changed
+
+    - name: Neovim everywhere helper script
+      ansible.builtin.copy:
+        src: "files/niri-scratch.sh"
+        dest: "~/bin/niri-scratch.sh"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: "0700"
+        become: true
+        become_user: "{{ username }}"
+
+    - name: Python poetry/mise project helper script
+      ansible.builtin.copy:
+        src: "files/newpproj.sh"
+        dest: "~/bin/newpproj.sh"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: "0700"
+        become: true
+        become_user: "{{ username }}"
+
+    - name: My wallpaper
+      ansible.builtin.copy:
+        src: "files/victorian-wallpaper.jpg"
+        dest: "~/Pictures/Wallpapers/victorian-wallpaper.jpg"
+        owner: "{{ username }}"
+        group: "{{ username }}"
+        mode: "0600"
+        become: true
+        become_user: "{{ username }}"
+
+    - name: Install gh dash
+      ansible.builtin.command:
+        cmd: "gh extension install dlvhdr/gh-dash"
+      when: pacman_packages.changed

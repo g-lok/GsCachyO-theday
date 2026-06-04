@@ -1,0 +1,12 @@
+---
+- name: Copy Slice sddm theme
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/login/sddm-slice"
+    dest: /usr/share/sddm/themes/
+  become: true
+
+- name: Set Slice sddm theme
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/login/sddm.conf"
+    dest: /etc/sddm.conf
+  become: true

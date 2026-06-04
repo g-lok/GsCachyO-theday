@@ -1,0 +1,23 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[ui]
+# Sets your default text editor for logs and descriptions
+editor = "nvim"
+default-command = "log"
+
+[revset-aliases]
+# Short nickname for all of your local unpushed commits
+unpushed = "::@ & ~remote_bookmarks().."
+
+# Flags commits you authored in the last 24 hours
+wip = "mine() & date(after: '24 hours ago')"
+
+[signing]
+# Uncomment the block below if you want to sign commits with an SSH key
+# backend = "gpg"
+# behavior = "own"
+# key = ""
+
+[git]
+# Automatically signs every change pushed out to Git remotes
+# sign-commits = true

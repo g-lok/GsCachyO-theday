@@ -1,0 +1,66 @@
+include "./cfg/animation.kdl"
+include "./cfg/autostart.kdl"
+include "./cfg/keybinds.kdl"
+include "./cfg/input.kdl"
+include "./cfg/display.kdl"
+include "./cfg/layout.kdl"
+include "./cfg/rules.kdl"
+include "./cfg/misc.kdl"
+
+// Environment parameters (Clean space-delimited KDL syntax)
+spawn-at-startup "systemctl" "--user" "import-environment" "PATH"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+screenshot-path "~/Pictures/Screenshots/capture-%Y-%m-%d-%H-%M-%S.png"
+
+
+binds {
+  // Fuzzel application launcher override
+  Mod+Space hotkey-overlay-title="Open Application Launcher: fuzzel" { spawn "fuzzel"; }
+
+  // Launch kitty terminal
+  Mod+Return hotkey-overlay-title="Open Terminal: kitty" { spawn "kitty"; }
+
+  // Open Brave Browser
+  Mod+Shift+B hotkey-overlay-title="Open Browser: brave" { spawn "brave"; }
+
+  // KITTYTERM: Open clipboard history inside Fuzzel and auto-paste the choice
+  Mod+Alt+CTRL+V hotkey-overlay-title="Clipboard History (paste: cmd+v)" {
+ 
+    spawn "sh" "-c" "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy && sleep 0.05 && wtype -M logo v"
+  }
+
+  // EVERYTHING_ELSE: Open clipboard history inside Fuzzel and auto-paste the choice
+  Mod+Alt+V hotkey-overlay-title="Clipboard History (paste: ctrl+v)" {
+ 
+    spawn "sh" "-c" "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy && sleep 0.05 && wtype -M ctrl v"
+  }
+
+  // Open Neovim as scratch buffer for GUI input
+  Mod+Shift+I hotkey-overlay-title="Input from Neovim" {
+    spawn "sh" "-c" "kitty --class scratch-nvim -e ~/bin/niri-scratch.sh"
+  }
+
+  // ─── Workspace Switching ───
+  Mod+J cooldown-ms=150 { focus-workspace-down; }
+  Mod+K cooldown-ms=150 { focus-workspace-up; }
+  Mod+CTRL+J cooldown-ms=150 { move-column-to-workspace-down; }
+  Mod+CTRL+K cooldown-ms=150 { move-column-to-workspace-up; }
+
+  // ─── Layout Controls ───
+  Mod+Shift+F hotkey-overlay-title="Maximize Column Width" { set-column-width "100%"; }
+}
+
+// input {
+//     mouse {
+//         accel-profile "adaptive"
+//         accel-speed 0.75  // Adjust between -1.0 and 1.0
+//     }
+//     keyboard
+//
+//     touchpad
+// }
+
+window-rule {
+    match app-id="scratch-nvim"
+    open-floating true
+}
