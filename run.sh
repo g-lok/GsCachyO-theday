@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-sudo pacman -S ansible
+sudo pacman -S ansible cachyos-niri-noctalia
 ansible-galaxy install -r requirements.yml
 ansible-playbook main.yml -K
 gh auth login
