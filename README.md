@@ -24,5 +24,5 @@ I'll write up more comprehensive docs, but for now check:
 1. To create a new poetry/python/mise project, use the helper `~/bin/newpproj.sh` script with the name of your new project as the first argument
 1. Use sesh to manage zellij/tmux sessions
 1. Use fzf/television for fuzzy finding
-1. There are two different keybinds for clipboard history paste depending on whether you are using a typical gui app or something in kitty. make sure you set theme in your niri config to something that works for you.
+1. There are two different keybinds for clipboard history paste depending on whether you are using a typical gui app or something in kitty. make sure you set the keymaps in your niri config to something that works for you.
 1. There is also a custom niri keybind/helper script that allows you to use a temp neovim buffer to write text and copy it into the system clipboard for input anywhere. Might need some fiddling depending on how you want things.
