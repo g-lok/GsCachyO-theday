@@ -1,6 +1,5 @@
 [tools]
 "cargo:jj-starship" = "latest"
-"cargo:xremap" = "latest"
 elixir = "latest"
 erlang = "latest"
 flutter = "latest"
