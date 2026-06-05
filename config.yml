@@ -40,6 +40,7 @@ pacman_pkgs:
   - foomatic-db-nonfree
   - foomatic-db-nonfree-ppds
   - foomatic-db-ppds
+  - fail2ban
   - fprintd
   - fuzzel
   - ghostscript

@@ -16,6 +16,13 @@
       register: galaxy_output
       changed_when: "'was installed successfully' in galaxy_output.stdout"
 
+  handlers:
+    - name: restart fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        state: restarted
+      become: true
+
   tasks:
     - name: Run the equivalent of "pacman -Syu" to update/upgrade
       community.general.pacman:
@@ -38,6 +45,36 @@
       when: pacman_packages.changed
       register: aur_packages
 
+    - name: Ensure fail2ban jail.d directory
+      ansible.builtin.file:
+        path: /etc/fail2ban/jail.d
+        state: directory
+        mode: '0755'
+      become: true
+
+    - name: Deploy fail2ban sshd jail
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/fail2ban/jail.d/sshd.local.j2"
+        dest: /etc/fail2ban/jail.d/sshd.local
+        mode: '0644'
+      become: true
+      notify: restart fail2ban
+
+    - name: Deploy fail2ban recidive jail
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/fail2ban/jail.d/recidive.local.j2"
+        dest: /etc/fail2ban/jail.d/recidive.local
+        mode: '0644'
+      become: true
+      notify: restart fail2ban
+
+    - name: Enable and start fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        enabled: true
+        state: started
+      become: true
+
     - name: Install oh-my-zsh + plugins
       ansible.builtin.include_tasks: tasks/oh-my-zsh.yml
 
@@ -52,27 +89,34 @@
 
     - name: Dotfiles
       ansible.builtin.include_tasks: tasks/dotfiles.yml
-      when: pacman_packages.changed
-      register: dotfiles
 
     - name: Mise
       ansible.builtin.command:
         cmd: "mise install"
-      when: dotfiles.changed
-      register: mise
+      changed_when: false
 
     - name: Poetry local venvs
       ansible.builtin.command:
         cmd: "poetry config virtualenvs.in-project true"
-      when: mise.changed
+      changed_when: false
 
-    - name: Config git/jujutsu
+    - name: Configure git user.name
+      community.general.git_config:
+        name: user.name
+        value: '{{ git_name }}'
+        scope: global
+
+    - name: Configure git user.email
+      community.general.git_config:
+        name: user.email
+        value: '{{ git_email }}'
+        scope: global
+
+    - name: Configure jujutsu
       ansible.builtin.shell: |
-        git config --global user.name '{{ git_name }}'
-        git config --global user.email '{{ git_email }}'
         jj config set --user user.name '{{ git_name }}'
         jj config set --user user.email '{{ git_email }}'
-      when: dotfiles.changed
+      changed_when: false
 
     - name: Neovim everywhere helper script
       ansible.builtin.copy:
@@ -107,4 +151,4 @@
     - name: Install gh dash
       ansible.builtin.command:
         cmd: "gh extension install dlvhdr/gh-dash"
-      when: pacman_packages.changed
+        creates: "{{ ansible_facts['user_dir'] }}/.local/share/gh/extensions/gh-dash"

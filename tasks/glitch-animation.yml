@@ -5,7 +5,14 @@
     dest: /usr/share/plymouth/themes/
   become: true
 
+- name: Get current plymouth theme
+  ansible.builtin.command:
+    cmd: plymouth-set-default-theme
+  register: current_theme
+  changed_when: false
+
 - name: Set glitch plymouth theme
   ansible.builtin.command:
     cmd: "plymouth-set-default-theme -R glitch"
   become: true
+  when: current_theme.stdout != 'glitch'
