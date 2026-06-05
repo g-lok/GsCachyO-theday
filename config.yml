@@ -97,6 +97,7 @@ pacman_pkgs:
   - github-cli
   - glances
   - glow
+  - gnupg
   - gsfonts
   - gst-libav
   - gst-plugin-pipewire
@@ -191,6 +192,7 @@ pacman_pkgs:
   - pacman-contrib
   - pandoc-cli
   - paru
+  - pass
   - pavucontrol
   - perl
   - pipewire-alsa
