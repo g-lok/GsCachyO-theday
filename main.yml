@@ -67,12 +67,11 @@
       when: mise.changed
 
     - name: Config git/jujutsu
-      ansible.builtin.command:
-        cmd: >
-          "git config --global user.name '{{ git_name }}' &&" +
-          "git config --global user.email '{{ git_email }}' &&" +
-          "jj config set --user user.name '{{ git_name }}' &&" +
-          "jj config set --user user.email '{{ git_email }}'"
+      ansible.builtin.shell: |
+        git config --global user.name '{{ git_name }}'
+        git config --global user.email '{{ git_email }}'
+        jj config set --user user.name '{{ git_name }}'
+        jj config set --user user.email '{{ git_email }}'
       when: dotfiles.changed
 
     - name: Neovim everywhere helper script
