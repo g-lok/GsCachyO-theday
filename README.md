@@ -4,6 +4,8 @@ Quick and dirty scripts and dotfiles to glam up a new CachyOS Niri environment t
 
 ## Install
 
+Change your git name and email in `config.yml`
+
 Run:
 
 ```bash
