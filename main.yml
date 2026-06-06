@@ -38,11 +38,22 @@
       become: true
       register: pacman_packages
 
+    - name: Allow wheel group to run pacman without password (required for AUR helpers)
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/10-wheel-pacman
+        content: |
+          %wheel ALL=(ALL) NOPASSWD: /usr/bin/pacman
+        mode: '0440'
+        owner: root
+        group: root
+        validate: /usr/sbin/visudo -c -f %s
+      become: true
+
     - name: Install AUR packages
       kewlfft.aur.aur:
         name: "{{ yay_pkgs }}"
         state: present
-        update_cache: yes
+        update_cache: false
       become: false
       become_user: "{{ username }}"
       when: pacman_packages.changed

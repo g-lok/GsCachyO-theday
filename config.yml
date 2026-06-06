@@ -36,6 +36,7 @@ pacman_pkgs:
   - docker
   - docker-buildx
   - docker-compose
+  - eza
   - foomatic-db
   - foomatic-db-engine
   - foomatic-db-gutenprint-ppds
