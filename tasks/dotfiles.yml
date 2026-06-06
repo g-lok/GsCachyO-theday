@@ -3,11 +3,8 @@
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/files/dotfiles"
     dest: "~/"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: preserve
     directory_mode: '0755'
-  become: true
   become_user: "{{ username }}"
   register: dotfirst
 
@@ -15,38 +12,32 @@
   ansible.builtin.template:
     src: "{{ playbook_dir }}/templates/noctalia-settings.j2"
     dest: "~/dotfiles/noctalia/.config/noctalia/settings.json"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: '0644'
-  become: true
   become_user: "{{ username }}"
   when: dotfirst.changed
   register: noctaliafirst
 
-- name: Stow dotfiles
-  ansible.builtin.command:
-    cmd: "bash ~/dotfiles/dotfiles.sh"
+- name: Stow dotfiles (ignore packages missing target dirs)
+  ansible.builtin.shell:
+    cmd: |
+      for dir in ~/dotfiles/*/; do
+        d=$(basename "$dir")
+        stow --adopt -d ~/dotfiles -t ~ "$d" 2>/dev/null || true
+      done
   register: dotstow
+  changed_when: false
 
 - name: Copy dotfiles final round
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/files/dotfiles"
     dest: "~/"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: preserve
     directory_mode: '0755'
-  become: true
   become_user: "{{ username }}"
-  when: dotstow.changed
 
 - name: Noctalia settings second round
   ansible.builtin.template:
     src: "{{ playbook_dir }}/templates/noctalia-settings.j2"
     dest: "~/dotfiles/noctalia/.config/noctalia/settings.json"
-    owner: "{{ username }}"
-    group: "{{ username }}"
     mode: '0644'
-  become: true
   become_user: "{{ username }}"
-  when: dotstow.changed
