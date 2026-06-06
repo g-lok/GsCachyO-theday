@@ -23,6 +23,18 @@
         state: restarted
       become: true
 
+    - name: restart sshd
+      ansible.builtin.systemd:
+        name: sshd
+        state: restarted
+      become: true
+
+    - name: restart avahi-daemon
+      ansible.builtin.systemd:
+        name: avahi-daemon
+        state: restarted
+      become: true
+
   tasks:
     - name: Run the equivalent of "pacman -Syu" to update/upgrade
       community.general.pacman:
@@ -59,6 +71,13 @@
       when: pacman_packages.changed
       register: aur_packages
 
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ username }}"
+        groups: docker
+        append: true
+      become: true
+
     - name: Ensure fail2ban jail.d directory
       ansible.builtin.file:
         path: /etc/fail2ban/jail.d
@@ -89,6 +108,49 @@
         state: started
       become: true
 
+    - name: Ensure sshd includes config drop-in directory
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^Include /etc/ssh/sshd_config.d/\\*\\.conf"
+        line: "Include /etc/ssh/sshd_config.d/*.conf"
+        create: true
+        mode: '0644'
+        owner: root
+        group: root
+      become: true
+      notify: restart sshd
+
+    - name: Harden sshd - disable keyboard-interactive auth
+      ansible.builtin.copy:
+        dest: /etc/ssh/sshd_config.d/50-opencode.conf
+        content: |
+          KbdInteractiveAuthentication no
+        mode: '0644'
+        owner: root
+        group: root
+      become: true
+      notify: restart sshd
+
+    - name: Disable IPv6 in avahi-daemon
+      ansible.builtin.lineinfile:
+        path: /etc/avahi/avahi-daemon.conf
+        regexp: "^#?use-ipv6="
+        line: "use-ipv6=no"
+        mode: '0644'
+      become: true
+      notify: restart avahi-daemon
+
+    - name: Enable system services (docker, sshd, avahi)
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - docker
+        - sshd
+        - avahi-daemon
+      become: true
+
     - name: Install oh-my-zsh + plugins
       ansible.builtin.include_tasks: tasks/oh-my-zsh.yml
 
@@ -117,15 +179,28 @@
     - name: Init opam if not already initialized
       ansible.builtin.command:
         cmd: opam init --disable-sandboxing --no-setup -y
-        creates: "{{ ansible_user_dir }}/.opam"
+        creates: "{{ ansible_facts['user_dir'] }}/.opam"
       become_user: "{{ username }}"
 
     - name: Install choosenim and Nim (x86_64 only)
       ansible.builtin.shell:
         cmd: curl -fsSL https://nim-lang.org/choosenim/init.sh | sh -s -- -y
-        creates: "{{ ansible_user_dir }}/.nimble/bin/nim"
+        creates: "{{ ansible_facts['user_dir'] }}/.nimble/bin/nim"
       become_user: "{{ username }}"
-      when: ansible_architecture == "x86_64"
+      when: ansible_facts['architecture'] == "x86_64"
+
+    - name: Add nimble bin to system PATH via profile.d
+      ansible.builtin.copy:
+        dest: /etc/profile.d/nimble.sh
+        content: |
+          # Add Nimble bin dir to PATH if it exists
+          if [ -d "$HOME/.nimble/bin" ]; then
+            export PATH="$HOME/.nimble/bin:$PATH"
+          fi
+        mode: '0644'
+        owner: root
+        group: root
+      become: true
 
     - name: Configure git user.name
       community.general.git_config:
