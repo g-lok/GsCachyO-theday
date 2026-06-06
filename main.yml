@@ -103,6 +103,19 @@
         cmd: "poetry config virtualenvs.in-project true"
       changed_when: false
 
+    - name: Init opam if not already initialized
+      ansible.builtin.command:
+        cmd: opam init --disable-sandboxing --no-setup -y
+        creates: "{{ ansible_user_dir }}/.opam"
+      become_user: "{{ username }}"
+
+    - name: Install choosenim and Nim (x86_64 only)
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://nim-lang.org/choosenim/init.sh | sh -s -- -y
+        creates: "{{ ansible_user_dir }}/.nimble/bin/nim"
+      become_user: "{{ username }}"
+      when: ansible_architecture == "x86_64"
+
     - name: Configure git user.name
       community.general.git_config:
         name: user.name
