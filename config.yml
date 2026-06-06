@@ -36,6 +36,7 @@ pacman_pkgs:
   - docker
   - docker-buildx
   - docker-compose
+  - exfat-utils
   - eza
   - foomatic-db
   - foomatic-db-engine
@@ -106,6 +107,7 @@ pacman_pkgs:
   - python-reportlab
   - qbittorrent
   - qt5-graphicaleffects
+  - rsync
   - scrcpy
   - seahorse
   # shelly: AUR-only, moved to yay_pkgs
