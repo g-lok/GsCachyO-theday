@@ -17,6 +17,7 @@ sudoers_custom_config: |
 
 pacman_pkgs:
   - ansible
+  - bat
   - bind
   - birdfont
   - blanket
