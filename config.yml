@@ -20,7 +20,8 @@ pacman_pkgs:
   - bind
   - birdfont
   - blanket
-  - brave-bin
+  # brave-bin: AUR-only, moved to yay_pkgs
+  #- brave-bin
   - btrfs-assistant
   - cachyos-plymouth-theme
   - cachyos-snapper-support
@@ -62,9 +63,10 @@ pacman_pkgs:
   - keepassxc
   - keychain
   - kitty
-  - lazydocker
+  # lazydocker, lazyjj: AUR-only, moved to yay_pkgs
+  #- lazydocker
   - lazygit
-  - lazyjj
+  #- lazyjj
   - lib32-mesa
   - lib32-opencl-mesa
   - lib32-vulkan-intel
@@ -86,7 +88,8 @@ pacman_pkgs:
   - neovim
   - noto-color-emoji-fontconfig
   - obsidian
-  - onlyoffice-bin
+  # onlyoffice-bin: AUR-only, moved to yay_pkgs
+  #- onlyoffice-bin
   - opam
   - opencl-mesa
   - opencolorio
@@ -102,7 +105,8 @@ pacman_pkgs:
   - qt5-graphicaleffects
   - scrcpy
   - seahorse
-  - shelly
+  # shelly: AUR-only, moved to yay_pkgs
+  #- shelly
   - shortwave
   - signal-desktop
   - snapper
@@ -113,7 +117,8 @@ pacman_pkgs:
   - stow
   - stylua
   - system-config-printer
-  - television
+  # television: AUR-only, moved to yay_pkgs
+  #- television
   - tlp
   - tlp-rdw
   - tlpui
@@ -123,7 +128,8 @@ pacman_pkgs:
   - tree-sitter
   - ttf-jetbrains-mono-nerd
   - ttf-roboto
-  - ufw-extras
+  # ufw-extras: AUR-only, moved to yay_pkgs
+  #- ufw-extras
   - unixodbc
   - v4l2loopback-dkms
   - virt-manager
@@ -134,19 +140,30 @@ pacman_pkgs:
   - whois
   - wtype
   - xf86-input-wacom
-  - yay
+  # yay: AUR-only (installed by bootstrap), moved to yay_pkgs
+  #- yay
   - yazi
   - yubikey-manager
   - zellij
-  - zen-browser-bin
+  # zen-browser-bin: AUR-only, moved to yay_pkgs
+  #- zen-browser-bin
   - zoxide
 
 yay_pkgs:
+  - brave-bin
   - digimend-kernel-drivers-dkms-git
   - input-remapper-git
   - jack
+  - lazydocker
+  - lazyjj
   - localsend-bin
   - nirimod-git
+  - onlyoffice-bin
   - sesh-bin
+  - shelly
   - snapd
+  - television
   - ttf-nerd-fonts-meta
+  - ufw-extras
+  - yay
+  - zen-browser-bin

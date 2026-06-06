@@ -35,6 +35,7 @@
         name: "{{ pacman_pkgs }}"
         state: present
         update_cache: true
+      become: true
       register: pacman_packages
 
     - name: Install AUR packages
@@ -42,6 +43,8 @@
         name: "{{ yay_pkgs }}"
         state: present
         update_cache: yes
+      become: false
+      become_user: "{{ username }}"
       when: pacman_packages.changed
       register: aur_packages
 
@@ -122,31 +125,22 @@
       ansible.builtin.copy:
         src: "files/niri-scratch.sh"
         dest: "~/bin/niri-scratch.sh"
-        owner: "{{ username }}"
-        group: "{{ username }}"
         mode: "0700"
-        become: true
-        become_user: "{{ username }}"
+      become_user: "{{ username }}"
 
     - name: Python poetry/mise project helper script
       ansible.builtin.copy:
         src: "files/newpproj.sh"
         dest: "~/bin/newpproj.sh"
-        owner: "{{ username }}"
-        group: "{{ username }}"
         mode: "0700"
-        become: true
-        become_user: "{{ username }}"
+      become_user: "{{ username }}"
 
     - name: My wallpaper
       ansible.builtin.copy:
         src: "files/victorian-wallpaper.jpg"
         dest: "~/Pictures/Wallpapers/victorian-wallpaper.jpg"
-        owner: "{{ username }}"
-        group: "{{ username }}"
         mode: "0600"
-        become: true
-        become_user: "{{ username }}"
+      become_user: "{{ username }}"
 
     - name: Install gh dash
       ansible.builtin.command:
