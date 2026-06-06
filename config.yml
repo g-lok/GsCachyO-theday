@@ -64,6 +64,7 @@ pacman_pkgs:
   - keepassxc
   - keychain
   - kitty
+  - kitty-terminfo
   # lazydocker, lazyjj: AUR-only, moved to yay_pkgs
   #- lazydocker
   - lazygit
@@ -151,6 +152,7 @@ pacman_pkgs:
   - zoxide
 
 yay_pkgs:
+  - appimagelauncher
   - brave-bin
   - digimend-kernel-drivers-dkms-git
   - input-remapper-git
