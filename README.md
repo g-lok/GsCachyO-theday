@@ -14,6 +14,8 @@ Run:
 
 Make sure you auth the gh cli tool, and be sure to use SSH (generate and upload key if you don't have one already).
 
+If you were using some other desktop already, make sure you accept the pacman overrwrites and choose Niri on login after a restart.
+
 ## Usage
 
 I'll write up more comprehensive docs, but for now check:
