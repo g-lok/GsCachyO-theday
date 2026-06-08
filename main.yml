@@ -234,6 +234,13 @@
         mode: "0700"
       become_user: "{{ username }}"
 
+    - name: Python uv/mise project helper script
+      ansible.builtin.copy:
+        src: "files/newuvproj.sh"
+        dest: "~/bin/newuvproj.sh"
+        mode: "0700"
+      become_user: "{{ username }}"
+
     - name: My wallpaper
       ansible.builtin.copy:
         src: "files/victorian-wallpaper.jpg"

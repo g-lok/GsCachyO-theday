@@ -11,15 +11,20 @@ java = "latest"
 kotlin = "latest"
 node = "lts"
 "npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:sfw" = "latest"
+"npm:skills" = "latest"
 odin = { version = "latest", exe = "odin" }
+"pipx:graphifyy" = "latest"
 pipx = "latest"
 poetry = "latest"
 python = "latest"
 ruby = "latest"
 rust = "latest"
 terraform = "latest"
+uv = "latest"
 zig = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["ruby"]
+minimum_release_age = "7d"
 zig.use_community_mirrors = true

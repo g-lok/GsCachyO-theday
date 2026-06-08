@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export PATH=$PATH:$HOME/bin
+export PATH=$HOME/bin:$PATH
 
 export GOPATH="$HOME/Go"
 export PATH="$HOME/Go/bin:$PATH"
