@@ -220,27 +220,6 @@
         jj config set --user user.email '{{ git_email }}'
       changed_when: false
 
-    - name: Neovim everywhere helper script
-      ansible.builtin.copy:
-        src: "files/niri-scratch.sh"
-        dest: "~/bin/niri-scratch.sh"
-        mode: "0700"
-      become_user: "{{ username }}"
-
-    - name: Python poetry/mise project helper script
-      ansible.builtin.copy:
-        src: "files/newpproj.sh"
-        dest: "~/bin/newpproj.sh"
-        mode: "0700"
-      become_user: "{{ username }}"
-
-    - name: Python uv/mise project helper script
-      ansible.builtin.copy:
-        src: "files/newuvproj.sh"
-        dest: "~/bin/newuvproj.sh"
-        mode: "0700"
-      become_user: "{{ username }}"
-
     - name: My wallpaper
       ansible.builtin.copy:
         src: "files/victorian-wallpaper.jpg"
