@@ -38,6 +38,7 @@ pacman_pkgs:
   - docker-compose
   - exfat-utils
   - eza
+  - fd
   - foomatic-db
   - foomatic-db-engine
   - foomatic-db-gutenprint-ppds
@@ -47,6 +48,7 @@ pacman_pkgs:
   - fail2ban
   - fprintd
   - fuzzel
+  - fzf
   - ghostscript
   - github-cli
   - glow
@@ -61,6 +63,7 @@ pacman_pkgs:
   - imv
   - intel-media-driver
   - intel-media-sdk
+  - jq
   - jujutsu
   - kdenlive
   - keepassxc
@@ -107,6 +110,7 @@ pacman_pkgs:
   - python-reportlab
   - qbittorrent
   - qt5-graphicaleffects
+  - ripgrep
   - rsync
   - scrcpy
   - seahorse
