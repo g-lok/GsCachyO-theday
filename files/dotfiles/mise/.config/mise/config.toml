@@ -13,6 +13,7 @@ node = "lts"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:sfw" = "latest"
 "npm:skills" = "latest"
+"npm:hunkdiff" = "latest"
 odin = { version = "latest", exe = "odin" }
 "pipx:graphifyy" = "latest"
 pipx = "latest"
