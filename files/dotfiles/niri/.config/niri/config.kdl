@@ -24,7 +24,7 @@ binds {
   Mod+Shift+B hotkey-overlay-title="Open Browser: brave" { spawn "brave"; }
 
   // KITTYTERM: Open clipboard history inside Fuzzel and auto-paste the choice
-  Mod+Alt+CTRL+V hotkey-overlay-title="Clipboard History (paste: cmd+v)" {
+  Shift+Alt+CTRL+V hotkey-overlay-title="Clipboard History (paste: cmd+v)" {
  
     spawn "sh" "-c" "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy && sleep 0.05 && wtype -M logo v"
   }

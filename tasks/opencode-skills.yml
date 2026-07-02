@@ -1,0 +1,99 @@
+---
+- name: Check if opencode-agent-skills plugin is configured
+  ansible.builtin.command:
+    cmd: "grep -q 'opencode-agent-skills' {{ ansible_facts['user_dir'] }}/.config/opencode/opencode.jsonc"
+  register: plugin_check
+  failed_when: false
+  changed_when: false
+
+- name: Install opencode-agent-skills plugin
+  ansible.builtin.command:
+    cmd: "opencode plugin opencode-agent-skills -g"
+  when: plugin_check.rc != 0
+
+- name: Check if skills lock file exists
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.agents/.skill-lock.json"
+  register: skill_lock
+
+- name: Install npx skill sources
+  ansible.builtin.command:
+    cmd: "npx skills add {{ item }} -g -y"
+  loop: "{{ opencode_skill_sources }}"
+  when: not skill_lock.stat.exists
+
+- name: Install skills from configured sources
+  ansible.builtin.command:
+    cmd: "npx skills install {{ item }} -g -y"
+  loop: "{{ opencode_source_skills }}"
+  when: not skill_lock.stat.exists
+
+- name: Check each bundled skill exists at destination
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.agents/skills/{{ item }}/SKILL.md"
+  register: bundled_skills_check
+  loop: "{{ opencode_bundled_skills }}"
+
+- name: Copy bundled skill if missing
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/opencode-skills/{{ item.item }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.agents/skills/"
+    mode: preserve
+    directory_mode: "0755"
+  become_user: "{{ username }}"
+  loop: "{{ bundled_skills_check.results }}"
+  when: not item.stat.exists
+
+- name: Install ClawHub skills via openclaw
+  ansible.builtin.command:
+    cmd: "npx --yes openclaw skills install {{ item }} --global --force"
+  loop: "{{ opencode_clawhub_skills }}"
+
+- name: Check if ClawHub skill dir exists
+  ansible.builtin.stat:
+    path: "{{ ansible_facts['user_dir'] }}/.openclaw/skills/{{ item }}/SKILL.md"
+  register: clawhub_skill_check
+  loop: "{{ opencode_clawhub_skills }}"
+
+- name: Replace npx copy with ClawHub version via symlink
+  ansible.builtin.shell:
+    cmd: |
+      rm -rf "{{ ansible_facts['user_dir'] }}/.agents/skills/{{ item.item }}"
+      ln -s "{{ ansible_facts['user_dir'] }}/.openclaw/skills/{{ item.item }}" "{{ ansible_facts['user_dir'] }}/.agents/skills/{{ item.item }}"
+  loop: "{{ clawhub_skill_check.results }}"
+  when: item.stat.exists
+
+- name: Find .git or .jj repos in skills
+  ansible.builtin.find:
+    paths: "{{ ansible_facts['user_dir'] }}/.agents/skills"
+    patterns: ".git,.jj"
+    file_type: directory
+    hidden: true
+  register: vcs_dirs
+
+- name: Remove .git and .jj repos from skills
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ vcs_dirs.files }}"
+
+- name: Find installed skill directories
+  ansible.builtin.find:
+    paths: "{{ ansible_facts['user_dir'] }}/.agents/skills"
+    file_type: directory
+    excludes: ".*"
+  register: skill_dirs
+
+- name: Ensure opencode skills config directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/.config/opencode/skills"
+    state: directory
+    mode: "0755"
+
+- name: Create symlinks for skills to opencode config
+  ansible.builtin.file:
+    src: "{{ item.path }}"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/opencode/skills/{{ item.path | basename }}"
+    state: link
+    force: true
+  loop: "{{ skill_dirs.files }}"

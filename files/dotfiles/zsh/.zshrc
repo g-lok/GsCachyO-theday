@@ -96,6 +96,9 @@ plugins=(dotenv git fzf-tab zsh-autosuggestions zsh-syntax-highlighting zsh-vi-m
 
 source $ZSH/oh-my-zsh.sh
 
+# Restore last-argument cycle under zsh-vi-mode (Ctrl+X then .)
+zvm_after_init_commands+=('bindkey "^X." insert-last-word')
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
