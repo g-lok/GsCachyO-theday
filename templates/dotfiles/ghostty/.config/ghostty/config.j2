@@ -4,10 +4,9 @@ font-style = "Regular"
 font-size = 12
 shell-integration = zsh
 shell-integration-features = cursor,sudo,title,ssh-env,ssh-terminfo,path
-command = zsh -li -c "zellij"   
+command = {{ homebrew_bin_path }}/zsh -li -c "zellij"   
 macos-titlebar-style = hidden
 confirm-close-surface = false
-#shell-integration-features = cursor,sudo,title
 
 keybind = ctrl+shift+j=unbind
 keybind = ctrl+shift+tab=unbind

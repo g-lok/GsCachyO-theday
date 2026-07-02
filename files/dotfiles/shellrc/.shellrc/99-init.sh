@@ -36,6 +36,13 @@ if command -v fzf &>/dev/null; then
   export FZF_ALT_C_OPTS="--preview 'eza --icons=always --tree --color=always {} | head -200'"
 fi
 
+if command -v tv &>/dev/null; then
+  eval "$(tv init "$myshell")"
+  if [ "$myshell" = "zsh" ]; then
+    zvm_after_init_commands+=('bindkey "^R" tv-shell-history' 'bindkey "^T" tv-smart-autocomplete')
+  fi
+fi
+
 if command -v zoxide &>/dev/null; then
   eval "$(zoxide init "$myshell")"
 fi

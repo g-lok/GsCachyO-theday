@@ -17,3 +17,12 @@
     git clone https://github.com/LazyVim/starter $HOME/.config/nvim
     rm -rf $HOME/.config/nvim/.git
   when: not lazyvim.stat.exists
+
+- name: Deploy server lazyvim.json (disables unwanted lang extras)
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/files/gzima/lazyvim.json"
+    dest: "{{ ansible_facts['user_dir'] }}/.config/nvim/lazyvim.json"
+    mode: '0644'
+  when:
+    - inventory_hostname not in groups['arch_desktop']
+    - not is_macos | bool

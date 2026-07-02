@@ -4,6 +4,11 @@
   gather_facts: true
 
   pre_tasks:
+    - name: Pre-tasks for Opencode Integration
+      include_vars: vault.yml
+      failed_when: false
+      tags: ["always"]
+
     - name: Include playbook configuration.
       include_vars: "{{ item }}"
       with_fileglob:
@@ -101,6 +106,15 @@
       become: true
       notify: restart fail2ban
 
+    - name: Pre-touch fail2ban log file (avoids chicken-and-egg start failure)
+      ansible.builtin.file:
+        path: /var/log/fail2ban.log
+        state: touch
+        mode: '0640'
+        owner: root
+        group: adm
+      become: true
+
     - name: Enable and start fail2ban
       ansible.builtin.systemd:
         name: fail2ban
@@ -140,15 +154,22 @@
       become: true
       notify: restart avahi-daemon
 
-    - name: Enable system services (docker, sshd, avahi)
+    - name: Enable system services (docker, avahi)
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: true
         state: started
       loop:
         - docker
-        - sshd
         - avahi-daemon
+      become: true
+
+    - name: Configure sshd (Security)
+      ansible.builtin.systemd:
+        name: sshd
+        enabled: "{{ enable_sshd | default(false) }}"
+        state: "{{ 'started' if enable_sshd | default(false) else 'stopped' }}"
+        masked: "{{ not enable_sshd | default(false) }}"
       become: true
 
     - name: Install oh-my-zsh + plugins
@@ -170,6 +191,8 @@
       ansible.builtin.command:
         cmd: "mise install"
       changed_when: false
+      environment:
+        MISE_MINIMUM_RELEASE_AGE: "0s"
 
     - name: Poetry local venvs
       ansible.builtin.command:
@@ -219,6 +242,27 @@
         jj config set --user user.name '{{ git_name }}'
         jj config set --user user.email '{{ git_email }}'
       changed_when: false
+
+    - name: Import GPG signing key (if provided)
+      ansible.builtin.shell:
+        cmd: gpg --batch --import
+        stdin: "{{ gpg_signing_key_priv }}"
+      become_user: "{{ username }}"
+      when: gpg_signing_key_priv is defined
+      changed_when: false
+      no_log: true
+
+    - name: Set GPG signing key trust
+      ansible.builtin.command:
+        cmd: gpg --batch --yes --quick-set-trust {{ gpg_signing_key_pub }} ultimate
+      become_user: "{{ username }}"
+      when: gpg_signing_key_pub is defined
+      register: gpg_trust
+      changed_when: "'already set' not in gpg_trust.stderr"
+      failed_when: false
+
+    - name: Set up opencode skills
+      ansible.builtin.include_tasks: tasks/opencode-skills.yml
 
     - name: My wallpaper
       ansible.builtin.copy:

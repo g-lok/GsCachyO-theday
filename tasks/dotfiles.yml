@@ -1,43 +1,41 @@
 ---
-- name: Copy dotfiles first round
+- name: Calculate host-specific stow packages
+  ansible.builtin.set_fact:
+    host_stow_packages: "{{ dotfiles | default([]) }}"
+
+- name: Ensure dotfiles directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/dotfiles"
+    state: directory
+    mode: '0755'
+
+- name: Copy dotfiles first round (host packages only)
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/files/dotfiles"
-    dest: "~/"
+    src: "{{ playbook_dir }}/files/dotfiles/{{ item }}/"
+    dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item }}/"
     mode: preserve
     directory_mode: '0755'
+  loop: "{{ host_stow_packages }}"
   become_user: "{{ username }}"
-  register: dotfirst
+  when: host_stow_packages | length > 0
 
-- name: Noctalia settings first round
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/templates/noctalia-settings.j2"
-    dest: "~/dotfiles/noctalia/.config/noctalia/settings.json"
-    mode: '0644'
-  become_user: "{{ username }}"
-  when: dotfirst.changed
-  register: noctaliafirst
-
-- name: Stow dotfiles (ignore packages missing target dirs)
+- name: Stow CLI dotfiles only (ignore packages missing target dirs)
   ansible.builtin.shell:
     cmd: |
-      for dir in ~/dotfiles/*/; do
-        d=$(basename "$dir")
-        stow --adopt -d ~/dotfiles -t ~ "$d" 2>/dev/null || true
+      for dir in {{ host_stow_packages | join(' ') }}; do
+        stow --adopt -d ~/dotfiles -t ~ "$dir" 2>/dev/null || true
       done
   register: dotstow
   changed_when: false
+  when: host_stow_packages | length > 0
 
-- name: Copy dotfiles final round
+# Second round: run unconditionally (stow may have failed for some)
+- name: Copy dotfiles final round (host packages only)
   ansible.builtin.copy:
-    src: "{{ playbook_dir }}/files/dotfiles"
-    dest: "~/"
+    src: "{{ playbook_dir }}/files/dotfiles/{{ item }}/"
+    dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item }}/"
     mode: preserve
     directory_mode: '0755'
+  loop: "{{ host_stow_packages }}"
   become_user: "{{ username }}"
-
-- name: Noctalia settings second round
-  ansible.builtin.template:
-    src: "{{ playbook_dir }}/templates/noctalia-settings.j2"
-    dest: "~/dotfiles/noctalia/.config/noctalia/settings.json"
-    mode: '0644'
-  become_user: "{{ username }}"
+  when: host_stow_packages | length > 0

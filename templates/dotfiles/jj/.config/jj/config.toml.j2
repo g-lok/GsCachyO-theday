@@ -1,0 +1,21 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[user]
+name = "{{ git_name }}"
+email = "{{ git_email }}"
+
+[ui]
+editor = "nvim"
+default-command = "log"
+
+[revset-aliases]
+unpushed = "::@ & ~remote_bookmarks().."
+wip = "mine() & date(after: '24 hours ago')"
+
+[signing]
+backend = "gpg"
+behavior = "own"
+key = "{{ gpg_signing_key_pub }}"
+
+[git]
+sign-commits = true

@@ -63,6 +63,8 @@ fi
 
 # Jujutsu aliases
 alias jja="jj abandon"
+alias jjauth="jj metaedit --update-author"
+alias jjauthfix="jj metaedit --update-author -r 'remote_bookmarks().. & ~immutable()'"
 alias jjb="jj bookmark"
 alias jjba="jj bookmark advance"
 alias jjbc="jj bookmark create"

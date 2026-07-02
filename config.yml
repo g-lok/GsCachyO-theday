@@ -3,177 +3,132 @@ username: "{{ lookup('env', 'USER') }}"
 git_name: "my name"
 git_email: "my@email.com"
 
-sudoers_custom_config: |
-  #Defaults env_reset
-  Defaults !secure_path
-  Defaults    env_keep += "XDG_CONFIG_HOME HOME"
-  Defaults env_keep += "EDITOR VISUAL"
-  #Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-  #Defaults env_keep += "PATH"
-  #Defaults env_keep += "HOME"
-  # This fixes CVE-2005-4890 and possibly breaks some versions of kdesu
-  # (#1011624, https://bugs.kde.org/show_bug.cgi?id=452532)
-  Defaults use_pty
+# Security toggles
+enable_sshd: false
+
+dotfiles:
+  - bash
+  - bin
+  - btop
+  - fish
+  - golangci
+  - mise
+  - neovim
+  - npm
+  - nushell
+  - shellrc
+  - starship
+  - television
+  - tmux
+  - yazi
+  - zellij
+  - zsh
 
 pacman_pkgs:
+  - age
   - ansible
+  - avahi
+  - bandwhich
+  - base-devel
   - bat
   - bind
-  - birdfont
-  - blanket
-  # brave-bin: AUR-only, moved to yay_pkgs
-  #- brave-bin
-  - btrfs-assistant
+  - btop
   - cachyos-plymouth-theme
-  - cachyos-snapper-support
   - cachyos-themes-sddm
+  - choose
   - cliphist
-  - converseen
-  - cups
-  - cups-filters
-  - cups-pdf
-  - discord
+  - curlie
+  - delta
   - docker
   - docker-buildx
   - docker-compose
-  - exfat-utils
+  - dog
   - eza
-  - fd
-  - foomatic-db
-  - foomatic-db-engine
-  - foomatic-db-gutenprint-ppds
-  - foomatic-db-nonfree
-  - foomatic-db-nonfree-ppds
-  - foomatic-db-ppds
   - fail2ban
-  - fprintd
+  - fakeroot
+  - fd
+  - findutils
   - fuzzel
   - fzf
-  - ghostscript
+  - gdisk
   - github-cli
   - glow
   - gnupg
-  - gsfonts
-  - gst-plugin-va
-  - gum
-  - gutenprint
-  - handbrake
-  - headscale
-  - hplip
-  - imv
-  - intel-media-driver
-  - intel-media-sdk
+  - gnutls
+  - grep
+  - gron
+  - hexyl
+  - httpie
+  - hyperfine
   - jq
   - jujutsu
-  - kdenlive
-  - keepassxc
   - keychain
   - kitty
   - kitty-terminfo
-  # lazydocker, lazyjj: AUR-only, moved to yay_pkgs
-  #- lazydocker
+  - lazydocker
   - lazygit
-  #- lazyjj
-  - lib32-mesa
-  - lib32-opencl-mesa
-  - lib32-vulkan-intel
-  - libmythes
-  - librecad
-  - libreoffice-fresh
+  - lazyjj
+  - less
   - libyaml
-  - limine
-  - limine-mkinitcpio-hook
-  - limine-snapper-sync
   - linux-headers
-  - llvm
   - lsof
+  - ltrace
   - luarocks
   - markdownlint-cli2
   - mise
-  - mousetweaks
-  - movit
+  - moreutils
+  - mtr
   - neovim
-  - noto-color-emoji-fontconfig
-  - obsidian
-  # onlyoffice-bin: AUR-only, moved to yay_pkgs
-  #- onlyoffice-bin
-  - opam
-  - opencl-mesa
-  - opencolorio
-  - opencv
-  - opus-tools
-  - os-prober
-  - pandoc-cli
+  - nmap
   - pass
+  - posting
   - prettier
-  - python-pyqt5
-  - python-reportlab
-  - qbittorrent
-  - qt5-graphicaleffects
+  - procs
+  - pv
   - ripgrep
-  - rsync
-  - scrcpy
-  - seahorse
-  # shelly: AUR-only, moved to yay_pkgs
-  #- shelly
-  - shortwave
-  - signal-desktop
-  - snapper
-  - soundconverter
-  - sox
-  - sqlfluff
+  - sd
+  - sops
   - starship
   - stow
+  - strace
   - stylua
-  - system-config-printer
-  # television: AUR-only, moved to yay_pkgs
-  #- television
-  - tlp
-  - tlp-rdw
-  - tlpui
+  - tcpdump
+  - television
   - tmux
-  - torbrowser-launcher
-  - transmageddon
+  - tree
   - tree-sitter
   - ttf-jetbrains-mono-nerd
   - ttf-roboto
-  # ufw-extras: AUR-only, moved to yay_pkgs
-  #- ufw-extras
-  - unixodbc
-  - v4l2loopback-dkms
-  - virt-manager
-  - virtualbox
-  - vlc
-  - vulkan-intel
-  - waybar
+  - wget
   - whois
-  - wtype
-  - xf86-input-wacom
-  # yay: AUR-only (installed by bootstrap), moved to yay_pkgs
-  #- yay
+  - xh
   - yazi
-  - yubikey-manager
   - zellij
-  # zen-browser-bin: AUR-only, moved to yay_pkgs
-  #- zen-browser-bin
   - zoxide
+  - zsh
 
 yay_pkgs:
   - appimagelauncher
-  - brave-bin
-  - digimend-kernel-drivers-dkms-git
-  - input-remapper-git
-  - jack
-  - lazydocker
-  - lazyjj
   - localsend-bin
   - nirimod-git
-  - onlyoffice-bin
   - sesh-bin
-  - shelly
   - snapd
   - television
-  - ttf-nerd-fonts-meta
-  - ufw-extras
   - yay
-  - zen-browser-bin
+
+opencode_skill_sources:
+  - JuliusBrussee/caveman
+  - vercel-labs/skills
+
+opencode_bundled_skills:
+  - rex-sdk
+  - self-improving-agent
+  - zig
+  - zig-0.16.0
+
+opencode_source_skills:
+  - find-skills
+
+opencode_clawhub_skills:
+  - skill-vetter
+  - ai-humanizer
