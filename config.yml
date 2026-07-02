@@ -37,6 +37,7 @@ pacman_pkgs:
   - cachyos-themes-sddm
   - choose
   - cliphist
+  - curlie
   - delta
   - docker
   - docker-buildx
@@ -55,8 +56,10 @@ pacman_pkgs:
   - gnupg
   - gnutls
   - grep
+  - gron
   - gum
   - hexyl
+  - httpie
   - hyperfine
   - jq
   - jujutsu
@@ -79,6 +82,7 @@ pacman_pkgs:
   - neovim
   - nmap
   - pass
+  - posting
   - prettier
   - procs
   - pv
@@ -91,6 +95,7 @@ pacman_pkgs:
   - stylua
   - tcpdump
   - television
+  - tlrc
   - tmux
   - tree
   - tree-sitter
