@@ -57,7 +57,6 @@ pacman_pkgs:
   - gnutls
   - grep
   - gron
-  - gum
   - hexyl
   - httpie
   - hyperfine
@@ -95,7 +94,6 @@ pacman_pkgs:
   - stylua
   - tcpdump
   - television
-  - tlrc
   - tmux
   - tree
   - tree-sitter
