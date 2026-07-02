@@ -164,12 +164,12 @@
         - avahi-daemon
       become: true
 
-    - name: Disable and mask sshd (Security)
+    - name: Configure sshd (Security)
       ansible.builtin.systemd:
         name: sshd
-        enabled: false
-        state: stopped
-        masked: true
+        enabled: "{{ enable_sshd | default(false) }}"
+        state: "{{ 'started' if enable_sshd | default(false) else 'stopped' }}"
+        masked: "{{ not enable_sshd | default(false) }}"
       become: true
 
     - name: Install oh-my-zsh + plugins
