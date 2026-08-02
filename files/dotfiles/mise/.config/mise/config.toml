@@ -4,7 +4,6 @@ elixir = "latest"
 erlang = "latest"
 flutter = "latest"
 "github:anomalyco/opencode" = "latest"
-"github:odin-lang/Odin" = "latest"
 go = "latest"
 "go:github.com/bootdotdev/bootdev" = "latest"
 helm = "latest"
@@ -17,12 +16,11 @@ node = "lts"
 "npm:sfw" = "latest"
 "npm:skills" = "latest"
 "npm:hunkdiff" = "latest"
-odin = { version = "latest", exe = "odin" }
 "pipx:graphifyy" = "latest"
 "pipx:sqlit-tui" = "latest"
 pipx = "latest"
 poetry = "latest"
-python = "latest"
+python = "3.12"
 ruby = "latest"
 rust = "latest"
 terraform = "latest"
@@ -31,5 +29,4 @@ zig = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["ruby"]
-minimum_release_age = "7d"
 zig.use_community_mirrors = true

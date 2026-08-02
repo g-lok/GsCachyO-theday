@@ -7,7 +7,7 @@ python = "3.14.3"
 EOF
 mise trust "$1/mise.toml"
 cd "$1" || exit
-poetry add --group=dev pytest pytest-bdd pytest-cov
+poetry add --group=dev pytest pytest-bdd pytest-cov graphifyy
 rm -rf .venv
 cd ..
 mise cache clear

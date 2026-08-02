@@ -7,61 +7,64 @@ git_email: "my@email.com"
 enable_sshd: false
 
 dotfiles:
+  - alacritty
   - bash
   - bin
   - btop
+  - cachyos
   - fish
+  - fuzzel
+  - gh-dash
+  - ghostty
   - golangci
+  - jj
+  - kitty
+  - markdownlint
   - mise
   - neovim
+  - niri
+  - noctalia
   - npm
   - nushell
   - shellrc
   - starship
   - television
   - tmux
+  - VSCode
+  - wezterm
   - yazi
   - zellij
   - zsh
 
 pacman_pkgs:
   - age
-  - ansible
   - avahi
-  - bandwhich
-  - base-devel
   - bat
-  - bind
-  - btop
-  - cachyos-plymouth-theme
-  - cachyos-themes-sddm
   - choose
-  - cliphist
-  - curlie
-  - delta
   - docker
   - docker-buildx
   - docker-compose
   - dog
   - eza
   - fail2ban
-  - fakeroot
   - fd
-  - findutils
+  - ffmpeg
+  - fprintd
   - fuzzel
   - fzf
-  - gdisk
   - github-cli
+  - git-delta
   - glow
   - gnupg
   - gnutls
-  - grep
   - gron
+  - gum
   - hexyl
   - httpie
   - hyperfine
   - jq
   - jujutsu
+  - keepassxc
   - keychain
   - kitty
   - kitty-terminfo
@@ -73,6 +76,7 @@ pacman_pkgs:
   - linux-headers
   - lsof
   - ltrace
+  - lua
   - luarocks
   - markdownlint-cli2
   - mise
@@ -80,13 +84,15 @@ pacman_pkgs:
   - mtr
   - neovim
   - nmap
+  - pandoc-cli
   - pass
   - posting
   - prettier
   - procs
   - pv
-  - ripgrep
+  - rclone
   - sd
+  - signal-desktop
   - sops
   - starship
   - stow
@@ -99,21 +105,20 @@ pacman_pkgs:
   - tree-sitter
   - ttf-jetbrains-mono-nerd
   - ttf-roboto
-  - wget
   - whois
+  - wireguard-tools
   - xh
   - yazi
+  - yubikey-manager
   - zellij
   - zoxide
-  - zsh
 
 yay_pkgs:
-  - appimagelauncher
   - localsend-bin
   - nirimod-git
   - sesh-bin
-  - snapd
   - television
+  - ttf-nerd-fonts-meta
   - yay
 
 opencode_skill_sources:

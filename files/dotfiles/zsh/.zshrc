@@ -139,14 +139,4 @@ if [ -t 1 ]; then
 fi
 
 
-# if [[ -z "$ZELLIJ" && -z "$SSH_CONNECTION" ]]; then
-#   if [[ "$ZELLIJ_AUTO_ATTACH" == "true" ]]; then
-#     zellij attach -c
-#   else
-#     zellij -l welcome
-#   fi
-#   if [[ "$ZELLIJ_AUTO_EXIT" == "TRUE" ]]; then
-#     exit
-#   fi
-# fi
-#
+
