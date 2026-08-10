@@ -60,7 +60,7 @@
         dest: /etc/sudoers.d/10-wheel-pacman
         content: |
           %wheel ALL=(ALL) NOPASSWD: /usr/bin/pacman
-        mode: '0440'
+        mode: "0440"
         owner: root
         group: root
         validate: /usr/sbin/visudo -c -f %s
@@ -87,14 +87,14 @@
       ansible.builtin.file:
         path: /etc/fail2ban/jail.d
         state: directory
-        mode: '0755'
+        mode: "0755"
       become: true
 
     - name: Deploy fail2ban sshd jail
       ansible.builtin.template:
         src: "{{ playbook_dir }}/templates/fail2ban/jail.d/sshd.local.j2"
         dest: /etc/fail2ban/jail.d/sshd.local
-        mode: '0644'
+        mode: "0644"
       become: true
       notify: restart fail2ban
 
@@ -102,7 +102,7 @@
       ansible.builtin.template:
         src: "{{ playbook_dir }}/templates/fail2ban/jail.d/recidive.local.j2"
         dest: /etc/fail2ban/jail.d/recidive.local
-        mode: '0644'
+        mode: "0644"
       become: true
       notify: restart fail2ban
 
@@ -110,7 +110,7 @@
       ansible.builtin.file:
         path: /var/log/fail2ban.log
         state: touch
-        mode: '0640'
+        mode: "0640"
         owner: root
         group: adm
       become: true
@@ -128,7 +128,7 @@
         regexp: "^Include /etc/ssh/sshd_config.d/\\*\\.conf"
         line: "Include /etc/ssh/sshd_config.d/*.conf"
         create: true
-        mode: '0644'
+        mode: "0644"
         owner: root
         group: root
       become: true
@@ -139,7 +139,7 @@
         dest: /etc/ssh/sshd_config.d/50-opencode.conf
         content: |
           KbdInteractiveAuthentication no
-        mode: '0644'
+        mode: "0644"
         owner: root
         group: root
       become: true
@@ -150,7 +150,7 @@
         path: /etc/avahi/avahi-daemon.conf
         regexp: "^#?use-ipv6="
         line: "use-ipv6=no"
-        mode: '0644'
+        mode: "0644"
       become: true
       notify: restart avahi-daemon
 
@@ -199,42 +199,16 @@
         cmd: "poetry config virtualenvs.in-project true"
       changed_when: false
 
-    - name: Init opam if not already initialized
-      ansible.builtin.command:
-        cmd: opam init --disable-sandboxing --no-setup -y
-        creates: "{{ ansible_facts['user_dir'] }}/.opam"
-      become_user: "{{ username }}"
-
-    - name: Install choosenim and Nim (x86_64 only)
-      ansible.builtin.shell:
-        cmd: curl -fsSL https://nim-lang.org/choosenim/init.sh | sh -s -- -y
-        creates: "{{ ansible_facts['user_dir'] }}/.nimble/bin/nim"
-      become_user: "{{ username }}"
-      when: ansible_facts['architecture'] == "x86_64"
-
-    - name: Add nimble bin to system PATH via profile.d
-      ansible.builtin.copy:
-        dest: /etc/profile.d/nimble.sh
-        content: |
-          # Add Nimble bin dir to PATH if it exists
-          if [ -d "$HOME/.nimble/bin" ]; then
-            export PATH="$HOME/.nimble/bin:$PATH"
-          fi
-        mode: '0644'
-        owner: root
-        group: root
-      become: true
-
     - name: Configure git user.name
       community.general.git_config:
         name: user.name
-        value: '{{ git_name }}'
+        value: "{{ git_name }}"
         scope: global
 
     - name: Configure git user.email
       community.general.git_config:
         name: user.email
-        value: '{{ git_email }}'
+        value: "{{ git_email }}"
         scope: global
 
     - name: Configure jujutsu
@@ -264,7 +238,7 @@
     - name: Set up opencode skills
       ansible.builtin.include_tasks: tasks/opencode-skills.yml
 
-    - name: My wallpaper
+    - name: Victorian wallpaper
       ansible.builtin.copy:
         src: "files/victorian-wallpaper.jpg"
         dest: "~/Pictures/Wallpapers/victorian-wallpaper.jpg"
