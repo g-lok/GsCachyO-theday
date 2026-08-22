@@ -58,7 +58,6 @@ dotfiles:
   - zsh
 
 pacman_pkgs:
-  - television
   - age
   - avahi
   - bat

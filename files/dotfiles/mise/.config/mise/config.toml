@@ -2,7 +2,6 @@
 "cargo:jj-starship" = "latest"
 "github:anomalyco/opencode" = "latest"
 go = "latest"
-"go:github.com/bootdotdev/bootdev" = "latest"
 helm = "latest"
 java = "latest"
 k9s = "latest"
