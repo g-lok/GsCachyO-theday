@@ -1,8 +1,5 @@
 [tools]
 "cargo:jj-starship" = "latest"
-elixir = "latest"
-erlang = "latest"
-flutter = "latest"
 "github:anomalyco/opencode" = "latest"
 go = "latest"
 "go:github.com/bootdotdev/bootdev" = "latest"
@@ -25,7 +22,6 @@ ruby = "latest"
 rust = "latest"
 terraform = "latest"
 uv = "latest"
-zig = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["ruby"]

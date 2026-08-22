@@ -108,7 +108,7 @@
 
     - name: Pre-touch fail2ban log file (avoids chicken-and-egg start failure)
       ansible.builtin.file:
-        path: /var/log/fail2ban.log
+        path: "{{ fail2ban_log_path }}"
         state: touch
         mode: "0640"
         owner: root
@@ -186,6 +186,14 @@
 
     - name: Dotfiles
       ansible.builtin.include_tasks: tasks/dotfiles.yml
+      tags: ["dotfiles"]
+
+    - name: Update television channels
+      ansible.builtin.command:
+        cmd: tv update-channels
+      become_user: "{{ username }}"
+      changed_when: false
+      when: "'television' in dotfiles"
 
     - name: Mise
       ansible.builtin.command:

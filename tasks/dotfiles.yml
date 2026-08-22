@@ -2,14 +2,16 @@
 - name: Calculate host-specific stow packages
   ansible.builtin.set_fact:
     host_stow_packages: "{{ dotfiles | default([]) }}"
+  tags: ["always", "dotfiles"]
 
 - name: Ensure dotfiles directory exists
   ansible.builtin.file:
     path: "{{ ansible_facts['user_dir'] }}/dotfiles"
     state: directory
     mode: '0755'
+  tags: ["dotfiles"]
 
-- name: Copy dotfiles first round (host packages only)
+- name: Copy static dotfiles first round (host packages only)
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/files/dotfiles/{{ item }}/"
     dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item }}/"
@@ -18,6 +20,28 @@
   loop: "{{ host_stow_packages }}"
   become_user: "{{ username }}"
   when: host_stow_packages | length > 0
+  tags: ["dotfiles"]
+
+- name: Ensure dotfile template destination directories exist
+  ansible.builtin.file:
+    path: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item.pkg }}/{{ item.dest | dirname }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ templated_dotfiles }}"
+  when: 
+    - item.pkg in host_stow_packages
+    - (item.dest | dirname) != "."
+  tags: ["dotfiles"]
+
+- name: Template host-specific dotfiles first round
+  ansible.builtin.template:
+    src: "templates/dotfiles/{{ item.src }}"
+    dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item.pkg }}/{{ item.dest }}"
+    mode: '0644'
+  loop: "{{ templated_dotfiles }}"
+  when: 
+    - item.pkg in host_stow_packages
+  tags: ["dotfiles"]
 
 - name: Stow CLI dotfiles only (ignore packages missing target dirs)
   ansible.builtin.shell:
@@ -28,9 +52,10 @@
   register: dotstow
   changed_when: false
   when: host_stow_packages | length > 0
+  tags: ["dotfiles"]
 
 # Second round: run unconditionally (stow may have failed for some)
-- name: Copy dotfiles final round (host packages only)
+- name: Copy static dotfiles final round (host packages only)
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/files/dotfiles/{{ item }}/"
     dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item }}/"
@@ -39,3 +64,14 @@
   loop: "{{ host_stow_packages }}"
   become_user: "{{ username }}"
   when: host_stow_packages | length > 0
+  tags: ["dotfiles"]
+
+- name: Template host-specific dotfiles final round (restores playbook versions)
+  ansible.builtin.template:
+    src: "templates/dotfiles/{{ item.src }}"
+    dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item.pkg }}/{{ item.dest }}"
+    mode: '0644'
+  loop: "{{ templated_dotfiles }}"
+  when: 
+    - item.pkg in host_stow_packages
+  tags: ["dotfiles"]
