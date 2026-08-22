@@ -23,7 +23,7 @@ dotfiles:
   - mise
   - neovim
   - niri
-  - noctalia
+  # - noctalia
   - npm
   - nushell
   - shellrc
@@ -88,6 +88,7 @@ pacman_pkgs:
   - pass
   - posting
   - prettier
+  - progress
   - procs
   - pv
   - rclone
