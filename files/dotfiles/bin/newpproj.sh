@@ -3,7 +3,7 @@ poetry new "$1"
 cat <<EOF >"$1/mise.toml"
 [tools]
 poetry = { version = "latest", pyproject = "{{ config_root }}/pyproject.toml" }
-python = "3.14.3"
+python = "3.12"
 EOF
 mise trust "$1/mise.toml"
 cd "$1" || exit

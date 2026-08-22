@@ -5,6 +5,27 @@ git_email: "my@email.com"
 
 # Security toggles
 enable_sshd: false
+fail2ban_log_path: /var/log/fail2ban.log
+gpg_signing_key_pub: ""
+gpg_signing_key_priv: ""
+
+# Dotfile templates mapping
+templated_dotfiles:
+  - {
+      src: "ghostty/.config/ghostty/config.j2",
+      pkg: "ghostty",
+      dest: ".config/ghostty/config",
+    }
+  - {
+      src: "jj/.config/jj/config.toml.j2",
+      pkg: "jj",
+      dest: ".config/jj/config.toml",
+    }
+  - {
+      src: "noctalia/.config/noctalia/settings.json.j2",
+      pkg: "noctalia",
+      dest: ".config/noctalia/settings.json",
+    }
 
 dotfiles:
   - alacritty
@@ -37,6 +58,7 @@ dotfiles:
   - zsh
 
 pacman_pkgs:
+  - television
   - age
   - avahi
   - bat
@@ -72,6 +94,7 @@ pacman_pkgs:
   - lazygit
   - lazyjj
   - less
+  - libreoffice-fresh
   - libyaml
   - linux-headers
   - lsof
@@ -84,9 +107,12 @@ pacman_pkgs:
   - mtr
   - neovim
   - nmap
+  - noto-color-emoji-fontconfig
+  - noto-fonts
+  - noto-fonts-emoji
+  - onlyoffice-bin
   - pandoc-cli
   - pass
-  - posting
   - prettier
   - progress
   - procs
@@ -99,9 +125,8 @@ pacman_pkgs:
   - stow
   - strace
   - stylua
-  - tcpdump
-  - television
   - tmux
+  - television
   - tree
   - tree-sitter
   - ttf-jetbrains-mono-nerd
@@ -118,7 +143,7 @@ yay_pkgs:
   - localsend-bin
   - nirimod-git
   - sesh-bin
-  - television
+  - spotify
   - ttf-nerd-fonts-meta
   - yay
 
@@ -127,10 +152,8 @@ opencode_skill_sources:
   - vercel-labs/skills
 
 opencode_bundled_skills:
-  - rex-sdk
+  - ansible
   - self-improving-agent
-  - zig
-  - zig-0.16.0
 
 opencode_source_skills:
   - find-skills

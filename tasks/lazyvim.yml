@@ -6,23 +6,13 @@
 
 - name: install lazyvim
   ansible.builtin.shell: |
-    eval "$({{ homebrew_bin }} shellenv)"
     # required
-    mv ~/.config/nvim{,.bak}
+    mv ~/.config/nvim{,.bak} 2>/dev/null || true
 
     # optional but recommended
-    mv $HOME/.local/share/nvim{,.bak}
-    mv $HOME/.local/state/nvim{,.bak}
-    mv $HOME/.cache/nvim{,.bak}
+    mv $HOME/.local/share/nvim{,.bak} 2>/dev/null || true
+    mv $HOME/.local/state/nvim{,.bak} 2>/dev/null || true
+    mv $HOME/.cache/nvim{,.bak} 2>/dev/null || true
     git clone https://github.com/LazyVim/starter $HOME/.config/nvim
     rm -rf $HOME/.config/nvim/.git
   when: not lazyvim.stat.exists
-
-- name: Deploy server lazyvim.json (disables unwanted lang extras)
-  ansible.builtin.copy:
-    src: "{{ playbook_dir }}/files/gzima/lazyvim.json"
-    dest: "{{ ansible_facts['user_dir'] }}/.config/nvim/lazyvim.json"
-    mode: '0644'
-  when:
-    - inventory_hostname not in groups['arch_desktop']
-    - not is_macos | bool
