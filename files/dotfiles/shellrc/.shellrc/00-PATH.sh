@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
+# Linux desktop apps (AppImages) path
+export PATH="$HOME/Applications:$PATH"
+
 export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 export GOPATH="$HOME/Go"
 export PATH="$HOME/Go/bin:$PATH"
