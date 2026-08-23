@@ -9,6 +9,7 @@ Comprehensive list of tools and utilities managed by the GsCachyO-theday playboo
 | **age**               | Modern, simple, and secure file encryption tool.                                                      |
 | **avahi**             | Service discovery system facilitating zero-configuration networking.                                  |
 | **bat**               | A `cat` clone with syntax highlighting and Git integration.                                           |
+| **brave-bin**         | The Brave privacy-focused web browser. The new system default.                                        |
 | **choose**            | A human-friendly and fast alternative to `cut` and `awk`.                                             |
 | **docker**            | Platform for developing, shipping, and running applications in containers.                            |
 | **docker-buildx**     | Docker CLI plugin for extended build capabilities with BuildKit.                                      |
