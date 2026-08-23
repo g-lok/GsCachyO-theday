@@ -8,7 +8,7 @@ I attempt to handle the possibility you are on a different desktop/multiplexer i
 
 ## Install
 
-Change your git name and email in `config.yml`
+Change your git name and email in `config.yml`.
 
 Run:
 
@@ -22,11 +22,26 @@ If you were using some other desktop already, make sure you accept the pacman ov
 
 If you don't want to enable all system services, comment out the relevant lines in `run.sh`.
 
+If you want to set up your gpg signing keys, create a `vault.yml` with the following vars:
+
+```yml
+- gpg_signing_key_priv: "..."
+- gpg_signing_key_pub: "..."
+```
+
+Run `ansible-vault encrypt vault.yml` to encrypt it.
+
+Re-Run the playbook with:
+
+```bash
+ansible-playbook main.yml -K --ask-vault-pass
+```
+
 ## Usage
 
 I'll write up more comprehensive docs at some point, but for now:
 
-1. There are descriptions of every tool being installed by `pacman`, `yay`, and `mise` in the `package-summary.md` document. There are a ton of modern, awesome replacements for the old guard cli tools, plus a whole bunch of new ones. `eza` instead of `ls`. `btop` instead of `top`, `ripgrep (rg)` instead of `grep`, `zoxide` instead of `cd`, etc. Note that I have set up aliases for `ls` and `cd` to use their `eza` and `zoxide` counterparts. Also, learn how `zoxide` actually works to index every filepath you've been to so you can shortcut your way there. Otherwise, there are just WAY too many tools and apps to cover here.
+1. There are descriptions of every tool being installed by `pacman`, `yay`, and `mise` in the `package-summary.md` document. There are a ton of modern, awesome replacements for the old guard cli tools, plus a whole bunch of new ones. `eza` instead of `ls`. `btop` instead of `top`, `ripgrep (rg)` instead of `grep`, `zoxide` instead of `cd`, etc. Note that I have set up aliases for `ls` and `cd` to use their `eza` and `zoxide` counterparts. Also, learn how `zoxide` actually works to index every filepath you've been to so you can shortcut your way around. Otherwise, there are just WAY too many tools and apps to cover here.
 1. Dotfiles are now symlinked to `~/dotfiles/`.
 1. Check `niri`, `kitty`, `zellij`, `shellrc`, `neovim` for the most important dotfile configs and keymappings/aliases.
 1. As far as `lazyvim(neovim)` goes, I also used a script (included in the `bin` dotfiles) to generate the full keymappings as best as I could (it is certainly not complete), and threw the output in `lazyvim-keymaps.md`. Use the `nvim-keys` alias to run the script yourself. Not comprehensive, but good enough. The included `which-key.nvim` plugin will help a lot, and you can pull up a `telescope` fuzzy search for all the `which-key` bindings with `<leader>sk`. There's also the [Lazyvim official website](https://www.lazyvim.org/keymaps), and I also highly recommend the **EXCELLENT** [Lazyvim for Ambitious Developers](https://lazyvim-ambitious-devs.phillips.codes/) ebook to **really** learn how to do this right. Also check out the [base neovim keymaps](https://neovim.io/doc/user/vimindex/) for the basic stuff not listed in these other sources, but beware that many of these might have been overridden, re-assigned, or removed in the final lazyvim configs.
