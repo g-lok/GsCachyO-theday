@@ -172,6 +172,9 @@
         masked: "{{ not enable_sshd | default(false) }}"
       become: true
 
+    - name: Firewall rules
+      ansible.builtin.include_tasks: tasks/firewall.yml
+
     - name: Install oh-my-zsh + plugins
       ansible.builtin.include_tasks: tasks/oh-my-zsh.yml
 

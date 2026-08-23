@@ -1,0 +1,16 @@
+---
+- name: Allow LocalSend TCP port
+  community.general.ufw:
+    rule: allow
+    port: "53317"
+    proto: tcp
+    comment: LocalSend-App
+  become: true
+
+- name: Allow LocalSend UDP port
+  community.general.ufw:
+    rule: allow
+    port: "53317"
+    proto: udp
+    comment: LocalSend-App
+  become: true
