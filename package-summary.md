@@ -21,6 +21,7 @@ Comprehensive list of tools and utilities managed by the GsCachyO-theday playboo
 | **fprintd**           | D-Bus service to access fingerprint readers.                                                          |
 | **fzf**               | A general-purpose command-line fuzzy finder.                                                          |
 | **github-cli**        | GitHub’s official command-line interface.                                                             |
+| **gh-dash**           | A `github-cli` plugin that provides a powerful TUI for managing repository PRs.                       |
 | **git-delta**         | A syntax-highlighting pager for git, diff, and grep output.                                           |
 | **glow**              | A terminal-based markdown reader.                                                                     |
 | **gnupg**             | A complete and free implementation of the OpenPGP standard.                                           |
