@@ -68,7 +68,7 @@ There's probably things I set up that I forgot about, but this should cover MOST
 - Setting battery charge limit if on a laptop. Method will depend on your laptop, I don't remember exactly what I did for mine.
 - Setting up ssh and gpg keys.
 - Setting hostname and avahi mDNS service.
-- Enabling opensssh if you want remote access to your machine, and configuring firewall for whatever ports that need to be opened (I have already automated opening ports for `localsend`). CachyOS uses `ufw` to manage the firewall (`sudo ufw --help`).
+- Enabling openssh if you want remote access to your machine, and configuring firewall for whatever ports that need to be opened (I have already automated opening ports for `localsend`). CachyOS uses `ufw` to manage the firewall (`sudo ufw --help`).
 - Change localsend to launch with niri instead of the in-app setting, doesn't seem to work.
 - Changing `/boot/limine.conf` to something you like. I set a custom theme on mine by copying my wallpaper and the `AIXOID8.F12` font into `/boot/`, then putting this at the top of `/boot/limine.conf`:
 
