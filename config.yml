@@ -33,6 +33,7 @@ dotfiles:
   - bin
   - btop
   - cachyos
+  - electron
   - fish
   - fuzzel
   - gh-dash
@@ -139,6 +140,7 @@ pacman_pkgs:
   - zoxide
 
 yay_pkgs:
+  - httpie-desktop-bin
   - localsend-bin
   - nirimod-git
   - sesh-bin

@@ -9,7 +9,7 @@ include "./cfg/misc.kdl"
 
 // Environment parameters (Clean space-delimited KDL syntax)
 spawn-at-startup "systemctl" "--user" "import-environment" "PATH"
-spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri" "ELECTRON_OZONE_PLATFORM_HINT" "APPIMAGELAUNCHER_DISABLE" "QT_QPA_PLATFORM" "QT_QPA_PLATFORMTHEME" "QT_WAYLAND_DISABLE_WINDOWDECORATION"
 screenshot-path "~/Pictures/Screenshots/capture-%Y-%m-%d-%H-%M-%S.png"
 
 
@@ -27,18 +27,18 @@ binds {
   Shift+Alt+CTRL+V hotkey-overlay-title="Clipboard History (paste: cmd+v)" {
  
     spawn "sh" "-c" "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy && sleep 0.05 && wtype -M logo v"
-  }
+    }
 
   // EVERYTHING_ELSE: Open clipboard history inside Fuzzel and auto-paste the choice
   Mod+Alt+V hotkey-overlay-title="Clipboard History (paste: ctrl+v)" {
  
     spawn "sh" "-c" "cliphist list | fuzzel --dmenu | cliphist decode | wl-copy && sleep 0.05 && wtype -M ctrl v"
-  }
+    }
 
   // Open Neovim as scratch buffer for GUI input
   Mod+Shift+I hotkey-overlay-title="Input from Neovim" {
     spawn "sh" "-c" "kitty --class scratch-nvim -e ~/bin/niri-scratch.sh"
-  }
+    }
 
   // ─── Workspace Switching ───
   Mod+J cooldown-ms=150 { focus-workspace-down; }
@@ -63,4 +63,10 @@ binds {
 window-rule {
     match app-id="scratch-nvim"
     open-floating true
+}
+
+gestures {
+    hot-corners {
+        off
+    }
 }
