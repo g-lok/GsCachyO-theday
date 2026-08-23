@@ -62,6 +62,7 @@ pacman_pkgs:
   - age
   - avahi
   - bat
+  - brave-bin
   - choose
   - docker
   - docker-buildx
