@@ -93,17 +93,17 @@ Comprehensive list of tools and utilities managed by the GsCachyO-theday playboo
 
 ## Mise Tools
 
-| Tool                | Description                                                                 |
-| :------------------ | :-------------------------------------------------------------------------- |
-| **jj-starship**     | Starship prompt integration for the Jujutsu version control system.         |
-| **opencode**        | Interactive CLI agent specializing in software engineering tasks.           |
-| **helm**            | The Kubernetes Package Manager.                                             |
-| **k9s**             | Kubernetes CLI ToUI for managing clusters in style.                         |
-| **kubectl**         | The Kubernetes command-line tool for cluster management.                    |
-| **pi-coding-agent** | Raspberry Pi specialized coding assistant.                                  |
-| **hunkdiff**        | CLI tool for interactive git hunk management.                               |
-| **graphifyy**       | Knowledge graph generation from code and documentation.                     |
-| **sqlit-tui**       | A TUI for SQLite databases.                                                 |
-| **poetry**          | Python dependency management and packaging made easy.                       |
-| **terraform**       | Infrastructure as Code (IaC) tool for building and managing infrastructure. |
-| **uv**              | An extremely fast Python package and project manager.                       |
+| Tool                | Description                                                                                                   |
+| :------------------ | :------------------------------------------------------------------------------------------------------------ |
+| **jj-starship**     | Starship prompt integration for the Jujutsu version control system.                                           |
+| **opencode**        | Interactive CLI agent specializing in software engineering tasks.                                             |
+| **helm**            | The Kubernetes Package Manager.                                                                               |
+| **k9s**             | Kubernetes CLI ToUI for managing clusters in style.                                                           |
+| **kubectl**         | The Kubernetes command-line tool for cluster management.                                                      |
+| **pi-coding-agent** | Barebones and highly modular/moddable coding agent (make your own opencode alternative EXACTLY how you want). |
+| **hunkdiff**        | CLI tool for interactive git hunk management.                                                                 |
+| **graphifyy**       | Knowledge graph generation from code and documentation.                                                       |
+| **sqlit-tui**       | A TUI for SQLite databases.                                                                                   |
+| **poetry**          | Python dependency management and packaging made easy.                                                         |
+| **terraform**       | Infrastructure as Code (IaC) tool for building and managing infrastructure.                                   |
+| **uv**              | An extremely fast Python package and project manager.                                                         |
