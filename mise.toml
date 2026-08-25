@@ -1,4 +1,14 @@
 [tools]
-poetry = { version = "latest", pyproject = "{{ config_root }}/pyproject.toml" }
 python = "3.14.3"
+poetry = "latest"
 ansible = "13.6.0"
+
+[env]
+_.python.venv = "{{ config_root }}/.venv"
+[hooks]
+enter = """
+if [ -f "{{ config_root }}/poetry.lock" ] && [ ! -d "{{ config_root }}/.venv" ]; then
+  echo "mise: No .venv found. Bootstrapping with poetry install..."
+  mise exec poetry -- poetry install
+fi
+"""
