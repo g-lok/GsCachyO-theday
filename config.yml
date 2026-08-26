@@ -64,6 +64,7 @@ pacman_pkgs:
   - bat
   - brave-bin
   - choose
+  - difftastic
   - docker
   - docker-buildx
   - docker-compose
