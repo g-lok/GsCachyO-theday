@@ -6,6 +6,12 @@ alias nvim-keys="nvim --headless -c 'luafile $HOME/bin/dump_keymaps.lua' -c 'qa'
 alias oc="opencode"
 alias zdtab="zellij action new-tab --layout default"
 alias zd="zellij --layout default"
+alias zlg="zellij --layout gs-splitright"
+alias calc="qalc"
+alias calct="qalc -t"
+alias quote="qalc -s 'maxdeci 2'"
+alias quotet="qalc -t -s 'maxdeci 2' | wl-copy"
+
 # alias sudo="sudo -E "
 # Knock-off Linux pbcopy and pbpaste
 if [ "$(uname -s)" = "Linux" ]; then

@@ -48,6 +48,7 @@ dotfiles:
   # - noctalia
   - npm
   - nushell
+  - qalc
   - shellrc
   - starship
   - television
@@ -127,6 +128,8 @@ pacman_pkgs:
   - stow
   - strace
   - stylua
+  - superfile
+  - dua-cli
   - tmux
   - television
   - tree
@@ -148,6 +151,7 @@ yay_pkgs:
   - sesh-bin
   - spotify
   - ttf-nerd-fonts-meta
+  - tuios-bin
   - yay
 
 opencode_skill_sources:
