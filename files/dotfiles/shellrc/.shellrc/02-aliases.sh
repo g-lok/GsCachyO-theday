@@ -12,18 +12,6 @@ alias calct="qalc -t"
 alias quote="qalc -s 'maxdeci 2'"
 alias quotet="qalc -t -s 'maxdeci 2' | wl-copy"
 
-# alias sudo="sudo -E "
-# Knock-off Linux pbcopy and pbpaste
-if [ "$(uname -s)" = "Linux" ]; then
-  alias sudo='sudo '
-  alias pbcopy='xclip -selection clipboard'
-  alias pbpaste='xclip -selection clipboard -o'
-  export GIO_EXTRA_MODULES=""
-fi
-
-# Misc environment variables
-export EDITOR=nvim
-
 # Git aliases
 alias gpum='git pull upstream master -v'
 alias gfum='git fetch upstream master -v'
@@ -52,6 +40,7 @@ alias d='docker'
 alias r='rails'
 alias lzg='lazygit'
 alias lzd='lazydocker'
+alias lzj='lazyjj'
 
 # Git
 alias gcm='git commit -m'

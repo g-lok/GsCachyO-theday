@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Misc environment variables
+export EDITOR=nvim
 export CGO_ENABLED=1
 
 if [ -n "$BASH_VERSION" ]; then
@@ -11,13 +13,6 @@ fi
 ## Activate terminal stuff
 if command -v starship &>/dev/null; then
   eval "$(starship init "$myshell")"
-fi
-
-if command -v mise &>/dev/null; then
-  eval "$(mise activate "$myshell")"
-  export MISE_POETRY_AUTO_INSTALL=1
-  export MISE_POETRY_VENV_AUTO=1
-  # export MISE_CARGO_BINSTALL=true
 fi
 
 if command -v opam &>/dev/null; then

@@ -28,7 +28,7 @@
     state: directory
     mode: '0755'
   loop: "{{ templated_dotfiles }}"
-  when: 
+  when:
     - item.pkg in host_stow_packages
     - (item.dest | dirname) != "."
   tags: ["dotfiles"]
@@ -39,7 +39,7 @@
     dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item.pkg }}/{{ item.dest }}"
     mode: '0644'
   loop: "{{ templated_dotfiles }}"
-  when: 
+  when:
     - item.pkg in host_stow_packages
   tags: ["dotfiles"]
 
@@ -72,6 +72,6 @@
     dest: "{{ ansible_facts['user_dir'] }}/dotfiles/{{ item.pkg }}/{{ item.dest }}"
     mode: '0644'
   loop: "{{ templated_dotfiles }}"
-  when: 
+  when:
     - item.pkg in host_stow_packages
   tags: ["dotfiles"]
