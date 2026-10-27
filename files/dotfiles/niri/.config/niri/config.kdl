@@ -10,6 +10,9 @@ include "./cfg/misc.kdl"
 // Environment parameters (Clean space-delimited KDL syntax)
 spawn-at-startup "systemctl" "--user" "import-environment" "PATH"
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri" "ELECTRON_OZONE_PLATFORM_HINT" "APPIMAGELAUNCHER_DISABLE" "QT_QPA_PLATFORM" "QT_QPA_PLATFORMTHEME" "QT_WAYLAND_DISABLE_WINDOWDECORATION"
+spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
+spawn-sh-at-startup "localsend --start-minimized"
 screenshot-path "~/Pictures/Screenshots/capture-%Y-%m-%d-%H-%M-%S.png"
 
 
@@ -47,22 +50,26 @@ binds {
   Mod+CTRL+K cooldown-ms=150 { move-column-to-workspace-up; }
 
   // ─── Layout Controls ───
+  Mod+F                               { fullscreen-window; }
   Mod+Shift+F hotkey-overlay-title="Maximize Column Width" { set-column-width "100%"; }
+  Mod+CTRL+F                          { expand-column-to-available-width; }
+  Mod+Shift+C                               { center-column; }
 }
-
-// input {
-//     mouse {
-//         accel-profile "adaptive"
-//         accel-speed 0.75  // Adjust between -1.0 and 1.0
-//     }
-//     keyboard
-//
-//     touchpad
-// }
 
 window-rule {
     match app-id="scratch-nvim"
     open-floating true
+    default-column-width { proportion 0.5; }
+    default-window-height { proportion 0.4; }
+}
+
+window-rule {
+  match app-id="^discord$"
+  match app-id="^signal$"
+  match app-id="^calibre"
+  match app-id="^Spotify"
+
+  default-column-width { proportion 1.0; }
 }
 
 gestures {

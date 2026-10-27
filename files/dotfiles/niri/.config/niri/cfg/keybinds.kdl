@@ -9,28 +9,36 @@ binds {
     Mod+Shift+ESCAPE                     { show-hotkey-overlay; }
 
     // ─── Applications ───
-    Mod+Return hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
-    Mod+Space hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
-    Mod+Shift+B hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
-    Mod+ALT+L hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
-    Mod+Shift+Q hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+    Mod+Return                          hotkey-overlay-title="Open Terminal: Alacritty" { spawn "alacritty"; }
+    Mod+B                               hotkey-overlay-title="Open Browser: firefox" { spawn "firefox"; }
+
+    // --- Noctalia ---
+    Mod+Shift+Return                    hotkey-overlay-title="Open Wallpaper Selector: noctalia wallpaper toggle" { spawn-sh "noctalia msg panel-toggle wallpaper"; }
+    Mod+S                               hotkey-overlay-title="Open Control Center: noctalia controlCenter" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    Mod+Shift+S                         hotkey-overlay-title="Open Settings: noctalia settings" { spawn-sh "noctalia msg settings-toggle"; }
+    Mod+CTRL+Return                     hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    Mod+ALT+L                           hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "noctalia msg session lock"; }
+    Mod+Shift+Q                         hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "noctalia msg panel-toggle session"; }
+
+    // Please set the text editor of your choice.
+    // Mod+Shift+E                               hotkey-overlay-title="Open Text Editor: Zed" { spawn "zed"; }
 
     // Please choose your own file manager.
-    Mod+E hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
+    Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
 
     // ─── Media Controls ───
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease"; }
-    XF86AudioMute allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput"; }
-    XF86AudioMicMute allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
-    XF86AudioNext allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media next"; }
-    XF86AudioPrev allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media previous"; }
-    XF86AudioPlay allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
-    XF86AudioPause allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+    XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute                       allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMicMute                    allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
+    XF86AudioNext                       allow-when-locked=true { spawn-sh "noctalia msg media next"; }
+    XF86AudioPrev                       allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
+    XF86AudioPlay                       allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
+    XF86AudioPause                      allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
 
     // ─── Brightness Controls ───
-    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
 
     // ─── Window Movement and Focus ───
     Mod+Q                               { close-window; }
@@ -67,12 +75,26 @@ binds {
     Mod+Shift+CTRL+Right                { move-column-to-monitor-right; }
     Mod+Shift+CTRL+UP                   { move-column-to-monitor-up; }
     Mod+Shift+CTRL+Down                 { move-column-to-monitor-down; }
+    Mod+Shift+V                         { switch-focus-between-floating-and-tiling; }
+
+    // Mod+BracketLeft                     { consume-or-expel-window-left; }
+    // Mod+BracketRight                    { consume-or-expel-window-right; }
+    //
+    // Mod+Comma                           { consume-window-into-column; }
+    // Mod+Period                          { expel-window-from-column; }
+    //
+    // Mod+R                               { switch-preset-column-width; }
+    // Mod+Shift+R                         { switch-preset-column-width-back; }
+    //
+    // Mod+Ctrl+Shift+R                    { switch-preset-window-height; }
+    Mod+Ctrl+R                          { reset-window-height; }
+
 
     // ─── Workspace Switching ───
-    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
-    Mod+CTRL+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
-    Mod+CTRL+WheelScrollUp cooldown-ms=150 { move-column-to-workspace-up; }
+    Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }
+    Mod+CTRL+WheelScrollDown            cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+CTRL+WheelScrollUp              cooldown-ms=150 { move-column-to-workspace-up; }
 
     Mod+WheelScrollRight                { focus-column-right; }
     Mod+WheelScrollLeft                 { focus-column-left; }
@@ -108,17 +130,20 @@ binds {
 
     // ─── Layout Controls ───
     Mod+CTRL+F                          { expand-column-to-available-width; }
-    Mod+Shift+C                               { center-column; }
+    Mod+C                               { center-column; }
     Mod+CTRL+C                          { center-visible-columns; }
     Mod+Minus                           { set-column-width "-10%"; }
     Mod+Equal                           { set-column-width "+10%"; }
     Mod+Shift+Minus                     { set-window-height "-10%"; }
     Mod+Shift+Equal                     { set-window-height "+10%"; }
 
+
     // ─── Modes ───
     Mod+T                               { toggle-window-floating; }
-    Mod+F                               { fullscreen-window; }
+    Mod+F                               { maximize-column; }
+    Mod+Shift+F                         { fullscreen-window; }
     Mod+W                               { toggle-column-tabbed-display; }
+    Mod+M                               { maximize-window-to-edges; }
 
     // ─── Screenshots ───
     CTRL+Shift+1                        { screenshot; }
@@ -128,12 +153,10 @@ binds {
     // ─── Emergency Escape Key ───
     // Use this when a fullscreen app blocks your keybinds.
     // It disables any active keyboard shortcut inhibitor, restoring control.
-    Mod+ESCAPE allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
 
     // ─── Exit / Power ───
-    CTRL+ALT+Delete                     { quit; }
- // Also quits Niri
-    Mod+Shift+P                         { power-off-monitors; }
- // Turn off screens (useful for OLED or privacy)
-    Mod+O repeat=false { toggle-overview; }
+    CTRL+ALT+Delete                     { quit; } // Also quits Niri
+    Mod+Shift+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    Mod+O                               repeat=false { toggle-overview; }
 }
