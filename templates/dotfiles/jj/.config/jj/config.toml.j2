@@ -18,4 +18,4 @@ behavior = "own"
 key = "{{ gpg_signing_key_pub }}"
 
 [git]
-sign-commits = true
+sign-commits = "{{ jj_gpg_sign_commits_bool }}"
