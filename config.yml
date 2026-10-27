@@ -8,6 +8,7 @@ enable_sshd: false
 fail2ban_log_path: /var/log/fail2ban.log
 gpg_signing_key_pub: ""
 gpg_signing_key_priv: ""
+jj_gpg_sign_commits_bool: "false"
 
 # Dotfile templates mapping
 templated_dotfiles:
@@ -22,9 +23,9 @@ templated_dotfiles:
       dest: ".config/jj/config.toml",
     }
   - {
-      src: "noctalia/.config/noctalia/settings.json.j2",
+      src: "noctalia/.local/state/noctalia/settings.toml.j2",
       pkg: "noctalia",
-      dest: ".config/noctalia/settings.json",
+      dest: ".local/state/noctalia/settings.toml.j2",
     }
 
 dotfiles:
@@ -37,20 +38,18 @@ dotfiles:
   - fish
   - fuzzel
   - gh-dash
-  - ghostty
   - golangci
-  - jj
   - kitty
   - markdownlint
   - mise
   - neovim
   - niri
-  # - noctalia
   - npm
   - nushell
   - qalc
   - shellrc
   - starship
+  - superfile
   - television
   - tmux
   - VSCode
@@ -109,6 +108,7 @@ pacman_pkgs:
   - moreutils
   - mtr
   - neovim
+  - nerd-fonts
   - nmap
   - noto-color-emoji-fontconfig
   - noto-fonts
@@ -150,8 +150,8 @@ yay_pkgs:
   - nirimod-git
   - sesh-bin
   - spotify
-  - ttf-nerd-fonts-meta
   - tuios-bin
+  - tuxedo
   - yay
 
 opencode_skill_sources:
