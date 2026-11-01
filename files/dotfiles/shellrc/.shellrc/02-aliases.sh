@@ -2,6 +2,7 @@
 # G's aliases
 alias bpp="bat -pp"
 alias nv="nvim"
+alias yz="yazi"
 alias nvim-keys="nvim --headless -c 'luafile $HOME/bin/dump_keymaps.lua' -c 'qa'"
 alias oc="opencode"
 alias zdtab="zellij action new-tab --layout default"
