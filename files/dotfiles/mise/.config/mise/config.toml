@@ -8,12 +8,21 @@ k9s = "latest"
 kubectl = "latest"
 kotlin = "latest"
 node = "lts"
+deno = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:sfw" = "latest"
 "npm:skills" = "latest"
 "npm:hunkdiff" = "0.17.7"
 "pipx:graphifyy" = "latest"
 "pipx:sqlit-tui" = "latest"
+"pipx:ffmpeg-black-split" = "latest"
+"pipx:scdl" = "latest"
+"pipx:yt-dlp" = { version = "latest", extras = [
+  "default",
+  "curl-cffi",
+  "secretstorage",
+] }
+"go:github.com/jeffreytse/grimoire" = "latest"
 pipx = "latest"
 poetry = "latest"
 python = "3.12"
@@ -21,6 +30,7 @@ ruby = "latest"
 rust = "latest"
 terraform = "latest"
 uv = "latest"
+zig = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["ruby"]
